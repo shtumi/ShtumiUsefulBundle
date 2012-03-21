@@ -1,0 +1,125 @@
+{% block type_ajax_autocomplete_widget %}
+
+    <script src="{{ asset('bundles/shtumiuseful/js/jqueryui/jquery-ui-1.8.18.custom.min.js') }}"></script>
+
+    <script>
+        $(function() {
+
+            $( "#{{ form.getVars().id }}"  ).autocomplete({
+                source: function( request, response ) {
+                    $.ajax({
+                        url: "{{ path('shtumi_ajaxautocomplete') }}",
+                        dataType: "json",
+                        data: {
+                            maxRows: 12,
+                            letters: request.term,
+                            entity_alias: "{{ entity_alias }}"
+                        },
+                        success: function( data ) {
+                            response( $.map( data, function( item ) {
+                                return {
+                                    label: item,
+                                    value: item
+                                }
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                open: function() {
+                    $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                },
+                close: function() {
+                    $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                }
+            });
+
+        });
+    </script>
+
+    <style>
+        .ui-autocomplete {
+            max-height: 100px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            /* add padding to account for vertical scrollbar */
+            padding-right: 20px;
+        }
+            /* IE 6 doesn't support max-height
+           * we use height instead, but this forces the menu to always be this tall
+           */
+        * html .ui-autocomplete {
+            height: 100px;
+        }
+    </style>
+
+
+    {{ form_widget(form) }}
+
+{% endblock %}
+
+
+{% block dependent_filtered_entity_widget %}
+
+    <select {{ block('widget_attributes') }}></select>
+
+    <img src='{{ asset('bundles/shtumiuseful/images/ajax-loader.gif' ) }}' id='loader' style='display: none;'>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $("select#{{ form.parent.getChild( parent_field ).getVars().id }}").change( function() {
+                var selected_index = {{ value ? value : 0 }};
+                $("#loader").show();
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        parent_id: $(this).val(),
+                        entity_alias: "{{ entity_alias }}",
+                        empty_value: "{{ empty_value }}"
+                    },
+                    url:"{{ path('shtumi_dependent_filtered_entity') }}",
+                    success: function(msg){
+                        if (msg != ''){
+                            $("select#{{ form.getVars().id }}").html(msg).show();
+                            $.each($("select#{{ form.getVars().id }} option"), function (index, option){
+                                if ($(option).val() == selected_index)
+                                    $(option).attr('selected', 'selected');
+                            })
+                            $("#loader").hide();
+                        }
+                        else
+                        {
+                            $("select#{{ form.getVars().id }}").html('<em>{{ no_result_msg|trans() }}</em>');
+                            $("#loader").hide();
+                        }
+                    }
+                });
+            });
+            $("select#{{ form.parent.getChild( parent_field ).getVars().id }}").trigger('change');
+        });
+    </script>
+
+{% endblock %}
+
+
+{% block daterange_widget %}
+
+    <style type="text/css">@import "{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.css') }}";</style>
+    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick-' ~ app.request.locale[0:2] ~ '.js') }}"></script>
+
+    <script>
+        $(function(){
+            $('input#{{ form.getVars().id }}').datepick({
+                rangeSelect: true, monthsToShow: 2, showTrigger: '#calImg', dateFormat: '{{ shtumi_statistic_datepicker_date_format }}' });
+        })
+    </script>
+
+    <input {{ block('widget_attributes') }} value="{{ value }}" class="shtumi-daterange" style='width: 140px;'>
+
+    <div style="display: none;">
+        <img id="calImg" src="{{ asset('bundles/shtumiuseful/js/datepicker/calendar-green.gif') }}" alt="Popup" class="trigger" height='22' align='absmiddle' style='margin-left: 10px;'>
+    </div>
+
+{% endblock %}
