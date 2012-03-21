@@ -4,13 +4,19 @@ ShtumiUsefulBundle - make typical things easier
 ShtumiUsefulBundle provides some useful things that needed almost in every project. It's:
 
 **Form types**:
+
 * Ajax Autocomplete form type (useful when you operate with thousands and hundred thousands records (for instance: users))
+
 * Dependent filtered form type (useful when you need operate dependent entities in one form (for instance: countries/regions))
+
 * Date range form type (allows you select date range with JS calendar and take valid DateRange object)
 
 **DQL extra functions**:
+
 * IFNULL
+
 * ROUND
+
 * DATE_DIFF
 
 You can use Ajax autocomplete form type as a filter type with [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) 
@@ -70,7 +76,7 @@ shtumi_useful:
     resource: '@ShtumiUsefulBundle/Resources/config/routing.xml'
 ```
 
-### Update your configuration app/config/config.yml
+### Update your configuration
 
 // app/config/config.yml
 
