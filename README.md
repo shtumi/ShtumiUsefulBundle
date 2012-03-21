@@ -64,6 +64,7 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
 ### Import routes
 
 // app/config/config.yml
+
 ```
 shtumi_useful:
     resource: '@ShtumiUsefulBundle/Resources/config/routing.xml'
@@ -72,6 +73,7 @@ shtumi_useful:
 ### Update your configuration app/config/config.yml
 
 // app/config/config.yml
+
 ```
 shtumi_useful:
     autocomplete_entities:
@@ -95,7 +97,9 @@ shtumi_useful:
 ```    
 
 ### Add custom DQL functions in your Doctrine configuration
+
 // app/config/config.yml
+
 ```
 doctrine:
     ...
@@ -108,4 +112,5 @@ doctrine:
                     numeric_functions:
                         ifnull: Shtumi\UsefulBundle\DQL\IfNull
                         round: Shtumi\UsefulBundle\DQL\Round
-```			
+```
+			
