@@ -100,23 +100,6 @@ shtumi_useful:
             role: ROLE_USER
             no_result_msg: 'No regions found for that country'
             order_property: title
-```    
-
-### Add custom DQL functions in your Doctrine configuration
-
-// app/config/config.yml
-
 ```
-doctrine:
-    ...
-    orm:
-        entity_managers:
-            default:
-                dql:
-                    datetime_functions:
-                        datediff: Shtumi\UsefulBundle\DQL\DateDiff
-                    numeric_functions:
-                        ifnull: Shtumi\UsefulBundle\DQL\IfNull
-                        round: Shtumi\UsefulBundle\DQL\Round
-```
+
 			
