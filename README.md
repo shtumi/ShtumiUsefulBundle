@@ -60,7 +60,7 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
 	'Sonata'            => __DIR__.'/../vendor/bundles',	
         // your other namespaces
     ));
- ```   
+```   
 ### Import routes
 
 // app/config/config.yml
