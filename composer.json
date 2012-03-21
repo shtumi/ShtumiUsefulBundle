@@ -1,0 +1,51 @@
+{
+    "name": "shtumi/useful-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony ShtumiUsefulBundle",
+    "keywords": ["Ajax Autocomplete form type", "Dependent filtered form type", "shtumi"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikhail Shtukin",
+            "email": "shtumi@tut.by"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "gregwar/formbundle",
+                "version": "master",
+                "dist": {
+                    "url": "https://github.com/Gregwar/FormBundle.git",
+                    "type": "git"
+                },
+                "source": {
+                    "url": "https://github.com/Gregwar/FormBundle.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "psr-0": { "Gregwar\\FormBundle": "" }
+                },
+                "target-dir": "Gregwar/FormBundle"
+            }
+        }
+    ]        
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "master-dev",
+        "symfony/security-bundle": "master-dev",
+        "knplabs/knp-menu-bundle": "master-dev",
+        "sonata-project/doctrine-orm-admin-bundle": "master",
+	"gregwar/formbundle": "master",
+    },
+    "suggest": {
+        "sonata-project/doctrine-orm-admin-bundle": "master-dev",
+        "sonata-project/intl-bundle": "master-dev"
+    },
+    "autoload": {
+        "psr-0": { "Shtumi\\UsefulBundle": "" }
+    },
+    "target-dir": "Shtumi/UsefulBundle"
+}
