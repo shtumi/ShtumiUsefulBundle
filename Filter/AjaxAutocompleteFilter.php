@@ -51,13 +51,22 @@ class AjaxAutocompleteFilter extends Filter
             return;
         }
 
-        if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO -1) {
-            $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $this->getName()));
+        $callback = $this->getOption('callback');
+        if ($callback){
+
+            call_user_func($callback, $queryBuilder, $alias, $field, $data);
+
         } else {
-            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+            if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO -1) {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $this->getName()));
+            } else {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+            }
+
+            $queryBuilder->setParameter($this->getName(), $data['value']);
         }
 
-        $queryBuilder->setParameter($this->getName(), $data['value']);
+
     }
 
     protected function association($queryBuilder, $data)
@@ -78,11 +87,18 @@ class AjaxAutocompleteFilter extends Filter
             throw new \RunTimeException('please provide a field_name options');
         }
 
-        $alias = 's_'.$this->getName();
+        if (!$this->getOption('callback')){
 
-        $queryBuilder->leftJoin(sprintf('%s.%s', $queryBuilder->getRootAlias(), $this->getFieldName()), $alias);
+            $alias = 's_'.$this->getName();
+            $queryBuilder->leftJoin(sprintf('%s.%s', $queryBuilder->getRootAlias(), $this->getFieldName()), $alias);
+            return array($alias, 'id');
 
-        return array($alias, 'id');
+        } else {
+
+            return array($this->getOption('alias', $queryBuilder->getRootAlias()), false);
+
+        };
+
     }
 
     public function getDefaultOptions()
@@ -94,6 +110,7 @@ class AjaxAutocompleteFilter extends Filter
             'field_options' => array(),
             'operator_type' => 'sonata_type_boolean',
             'operator_options' => array(),
+            'callback'      => null,
         );
     }
 
