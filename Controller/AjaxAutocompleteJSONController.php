@@ -33,10 +33,10 @@ class AjaxAutocompleteJSONController extends Controller
 
         switch ($entity_inf['search']){
             case "begins_with":
-                $like = '%' . $letters;
+                $like = $letters . '%';
             break;
             case "ends_with":
-                $like = $letters . '%';
+                $like = '%' . $letters;
             break;
             case "contains":
                 $like = '%' . $letters . '%';
