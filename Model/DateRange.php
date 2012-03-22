@@ -5,7 +5,7 @@ namespace Shtumi\UsefulBundle\Model;
 class DateRange
 {
 
-    private $date_format;
+    public $date_format;
 
     private $daterange_separator;
 

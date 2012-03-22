@@ -24,6 +24,8 @@ class ShtumiUsefulExtension extends Extension
 
         $container->setParameter('shtumi.autocomplete_entities', $config['autocomplete_entities']);
         $container->setParameter('shtumi.dependent_filtered_entities', $config['dependent_filtered_entities']);
+        $container->setParameter('shtumi.date_range', $config['date_range']);
+
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

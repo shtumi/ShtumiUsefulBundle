@@ -20,20 +20,22 @@ use Shtumi\UsefulBundle\Model\DateRange;
 
 class DateRangeType extends AbstractType
 {
-
+    private $date_format;
+    private $default_interval;
     private $container;
 
-    public function __construct($container){
-
-        $this->container = $container;
-
+    public function __construct($container, $parameters)
+    {
+        $this->date_format      = $parameters['date_format'];
+        $this->default_interval = $parameters['default_interval'];
+        $this->container        = $container;
     }
 
     public function getDefaultOptions(array $options)
     {
 
         if (!isset($options['default'])){
-            $dateRange = new DateRange($this->container->getParameter('shtumi.date_format'));
+            $dateRange = new DateRange($this->date_format);
         }
         else {
             $dateRange = $options['default'];
@@ -58,7 +60,7 @@ class DateRangeType extends AbstractType
     {
 
         $builder->appendClientTransformer(new DateRangeToValueTransformer(
-            $this->container->getParameter('shtumi.date_format')
+            $options['default']->date_format
         ));
 
         $builder->setData((string)$options['default']);
@@ -66,7 +68,7 @@ class DateRangeType extends AbstractType
         // Datepicker date format
         $searches = array('d', 'm', 'y', 'Y');
         $replaces = array('dd', 'mm', 'yy', 'yyyy');
-        $datepicker_format = str_replace($searches, $replaces, $this->container->getParameter('shtumi.date_format'));
+        $datepicker_format = str_replace($searches, $replaces, $options['default']->date_format);
 
         $builder->setAttribute('datepicker_date_format', $datepicker_format);
     }
@@ -74,6 +76,8 @@ class DateRangeType extends AbstractType
     public function buildView(FormView $view, FormInterface $form)
     {
         $view->set('datepicker_date_format', $form->getAttribute('datepicker_date_format'));
+        $view->set('locale', $this->container->get('request')->getLocale());
+
     }
 
 

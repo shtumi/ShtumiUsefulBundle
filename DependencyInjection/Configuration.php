@@ -44,9 +44,9 @@ class Configuration implements ConfigurationInterface
                                 ->defaultValue('begins_with')
                                 ->cannotBeEmpty()
                             ->end()
+                        ->end()
                     ->end()
                 ->end()
-            ->end()
 
                 ->arrayNode('dependent_filtered_entities')
                     ->useAttributeAsKey('id')
@@ -78,8 +78,23 @@ class Configuration implements ConfigurationInterface
                                 ->defaultValue(null)
                                 ->cannotBeEmpty()
                             ->end()
+                        ->end()
                     ->end()
                 ->end()
+
+                ->arrayNode('date_range')
+                    ->children()
+                        ->scalarNode('date_format')
+                            ->defaultValue('d/m/Y')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('default_interval')
+                            ->defaultValue('P30D')
+                            ->cannotBeEmpty()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
         ;
 
         return $treeBuilder;

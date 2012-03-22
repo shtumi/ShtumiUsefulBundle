@@ -107,12 +107,12 @@
 
     <style type="text/css">@import "{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.css') }}";</style>
     <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick-' ~ app.request.locale[0:2] ~ '.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick-' ~ locale[0:2] ~ '.js') }}"></script>
 
     <script>
         $(function(){
             $('input#{{ form.getVars().id }}').datepick({
-                rangeSelect: true, monthsToShow: 2, showTrigger: '#calImg', dateFormat: '{{ shtumi_statistic_datepicker_date_format }}' });
+                rangeSelect: true, monthsToShow: 2, showTrigger: '#calImg', dateFormat: '{{ datepicker_date_format }}' });
         })
     </script>
 
