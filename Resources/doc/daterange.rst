@@ -3,7 +3,7 @@ ShtumiUsefulBundle - make typical things easier
 DateRange
 =========
 
-.. image:: http://siteprom.com/img/shtumiusefulbundle/daterange.png
+.. image:: https://github.com/shtumi/ShtumiUsefulBundle/raw/master/Resources/doc/images/daterange.png
 
 Configuration
 -------------

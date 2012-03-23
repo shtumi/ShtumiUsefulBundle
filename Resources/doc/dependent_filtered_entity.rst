@@ -3,7 +3,7 @@ ShtumiUsefulBundle - make typical things easier
 Dependent filtered entity
 =========================
 
-.. image:: http://siteprom.com/img/shtumiusefulbundle/dependent_filtered_entity.png
+.. image:: https://github.com/shtumi/ShtumiUsefulBundle/raw/master/Resources/doc/images/dependent_filtered_entity.png
 
 
 Configuration
