@@ -19,13 +19,13 @@ ShtumiUsefulBundle provides some useful things that needed almost in every proje
 
 * DATE_DIFF
 
-You can use Ajax autocomplete form type as a filter type with [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) 
+You can use Ajax autocomplete form type as a filter type with [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle)
 
 
 
 ## Installation
-  
-### Add the following lines to your  `deps` file and then run `php bin/vendors install`:    
+
+### Add the following lines to your  `deps` file and then run `php bin/vendors install`:
 
 ```
 [ShtumiUsefulBundle]
@@ -35,7 +35,7 @@ You can use Ajax autocomplete form type as a filter type with [SonataAdminBundle
 [GregwarFormBundle]
     git=git://github.com/Gregwar/FormBundle.git
     target=/bundles/Gregwar/FormBundle
-    
+
 [SonataDoctrineORMAdminBundle]
     git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
     target=/bundles/Sonata/DoctrineORMAdminBundle
@@ -52,7 +52,7 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
             // ...
             new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
 	    new Gregwar\FormBundle\GregwarFormBundle(),
-	    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),            
+	    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             // ...
         );
     }
@@ -63,10 +63,10 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
     $loader->registerNamespaces(array(
         'Shtumi'            => __DIR__.'/../vendor/bundles',
 	'Gregwar'           => __DIR__.'/../vendor/bundles',
-	'Sonata'            => __DIR__.'/../vendor/bundles',	
+	'Sonata'            => __DIR__.'/../vendor/bundles',
         // your other namespaces
     ));
-```   
+```
 ### Import routes
 
 // app/config/routing.yml
@@ -78,28 +78,9 @@ shtumi_useful:
 
 ### Update your configuration
 
-// app/config/config.yml
+Update your configuration in accordance with [using ShtumiUsefulBundle things](https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/index.rst)
 
+### Load jQuery to your views
 ```
-shtumi_useful:
-    autocomplete_entities:
-        campaigns:
-            class: AcmeDemoBundle:Campaign
-            role: ROLE_ADMIN
-            property: title
-            search: contains
-
-        customers:
-            class: AcmeDemoBundle:USER
-            property: email
-
-    dependent_filtered_entities:
-        region_by_country:
-            class: AcmeDemoBundle:Region
-            parent_property: country
-            role: ROLE_USER
-            no_result_msg: 'No regions found for that country'
-            order_property: title
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js" type="text/javascript"></script>
 ```
-
-			
