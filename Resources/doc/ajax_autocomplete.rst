@@ -47,6 +47,9 @@ Simple usage
     $formBuilder
         ->add('product', 'shtumi_ajax_autocomplete', array('entity_alias'=>'products'));
 
+If you use ``shtumi_ajax_autocomplete`` in your own bundle with your own twig templates, you should load
+`JQuery <http://jquery.com>`_.
+
 
 Usage as SonataAdminBundle filter
 ---------------------------------
