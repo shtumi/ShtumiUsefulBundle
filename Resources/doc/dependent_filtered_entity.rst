@@ -58,3 +58,5 @@ Master and dependent fields should be in form together.
                           , 'parent_field'=>'country'))
 
 - **parent_field** - name of master field in your FormBuilder
+
+You should load `JQuery <http://jquery.com>`_ to your views.
