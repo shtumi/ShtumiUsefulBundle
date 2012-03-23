@@ -30,7 +30,7 @@ DateRange
 
 This form type operate with objects ``Shtumi\UsefulBundle\Model\DateRange``.
 
-There are two ways to create DateRange object:
+There are three ways to create DateRange object:
 
 1. By using ``shtumi_daterange`` service
 ****************************************
