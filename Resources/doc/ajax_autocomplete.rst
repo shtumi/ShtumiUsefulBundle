@@ -3,7 +3,7 @@ ShtumiUsefulBundle - make typical things easier
 Ajax autocomplete type
 ======================
 
-.. image:: https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/images/ajax_autocomplete.png
+.. image:: http://siteprom.com/img/shtumiusefulbundle/ajax_autocomplete.png
 
 
 Configuration
