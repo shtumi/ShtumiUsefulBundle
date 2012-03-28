@@ -47,8 +47,7 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
         return array(
             // ...
             new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
-	    new Gregwar\FormBundle\GregwarFormBundle(),
-	    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+	        new Gregwar\FormBundle\GregwarFormBundle(),
             // ...
         );
     }
@@ -58,8 +57,7 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
     // app/autoload.php
     $loader->registerNamespaces(array(
         'Shtumi'            => __DIR__.'/../vendor/bundles',
-	'Gregwar'           => __DIR__.'/../vendor/bundles',
-	'Sonata'            => __DIR__.'/../vendor/bundles',
+	    'Gregwar'           => __DIR__.'/../vendor/bundles',
         // your other namespaces
     ));
 ```
