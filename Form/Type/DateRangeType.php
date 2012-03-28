@@ -63,7 +63,7 @@ class DateRangeType extends AbstractType
             $options['default']->date_format
         ));
 
-        $builder->setData((string)$options['default']);
+        $builder->setData($options['default']);
 
         // Datepicker date format
         $searches = array('d', 'm', 'y', 'Y');
