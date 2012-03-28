@@ -24,9 +24,7 @@ class Configuration implements ConfigurationInterface
 
             ->children()
                 ->arrayNode('autocomplete_entities')
-                    //->addDefaultsIfNotSet()
                     ->useAttributeAsKey('id')
-
                     ->prototype('array')
                         ->children()
                             ->scalarNode('class')
@@ -83,6 +81,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 ->arrayNode('date_range')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('date_format')
                             ->defaultValue('d/m/Y')
