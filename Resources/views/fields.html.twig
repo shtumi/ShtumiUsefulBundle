@@ -1,6 +1,11 @@
 {% block type_ajax_autocomplete_widget %}
 
-    <script src="{{ asset('bundles/shtumiuseful/js/jqueryui/jquery-ui-1.8.18.custom.min.js') }}"></script>
+    <script type="text/javascript">
+        if (typeof jQuery.ui == 'undefined'){
+            $.getScript('{{ asset('/bundles/shtumiuseful/js/jqueryui/jquery-ui-1.8.18.custom.min.js') }}');
+        }
+
+    </script>
 
     <script>
         $(function() {
@@ -106,6 +111,7 @@
 {% block daterange_widget %}
 
     <style type="text/css">@import "{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.css') }}";</style>
+    <style type="text/css">@import "{{ asset('bundles/shtumiuseful/css/daterange.css') }}";</style>
     <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick-' ~ locale[0:2] ~ '.js') }}"></script>
 
@@ -116,7 +122,7 @@
         })
     </script>
 
-    <input {{ block('widget_attributes') }} value="{{ value }}" class="shtumi-daterange" style='width: 140px;'>
+    <input {{ block('widget_attributes') }} value="{{ value }}" class="shtumi-daterange">
 
     <div style="display: none;">
         <img id="calImg" src="{{ asset('bundles/shtumiuseful/js/datepicker/calendar-green.gif') }}" alt="Popup" class="trigger" height='22' align='absmiddle' style='margin-left: 10px;'>
