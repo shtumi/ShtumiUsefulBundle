@@ -39,11 +39,15 @@ class AjaxAutocompleteType extends EntityIdType
         $options = array_replace($defaultOptions, $options);
 
 
+        $entities = $this->container->getParameter('shtumi.autocomplete_entities');
+
         if (null === $options['entity_alias']) {
             throw new FormException('You must provide a entity alias "entity_alias" and tune it in config file');
         }
 
-        $entities = $this->container->getParameter('shtumi.autocomplete_entities');
+        if (!isset ($entities[$options['entity_alias']])){
+            throw new FormException('There are no entity alias "' . $options['entity_alias'] . '" in your config file');
+        }
 
         $options['class'] = $entities[$options['entity_alias']]['class'];
         $options['property'] = $entities[$options['entity_alias']]['property'];
