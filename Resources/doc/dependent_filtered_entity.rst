@@ -49,10 +49,10 @@ Master and dependent fields should be in form together.
 ::
 
     $formBuilder
-        -> add('country', 'entity', array('class'      => 'AcmeDemoBundle:Country'
-                                        , 'required'   => true
-                                        , 'empty_value'=> '== Choose country =='))
-        -> add('region', 'shtumi_dependent_filtered_entity'
+        ->add('country', 'entity', array('class'      => 'AcmeDemoBundle:Country'
+                                       , 'required'   => true
+                                       , 'empty_value'=> '== Choose country =='))
+        ->add('region', 'shtumi_dependent_filtered_entity'
                     , array('entity_alias' => 'region_by_country'
                           , 'empty_value'=> '== Choose region =='
                           , 'parent_field'=>'country'))

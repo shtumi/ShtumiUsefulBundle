@@ -35,10 +35,6 @@ You can use Ajax autocomplete form type as a filter type with [SonataAdminBundle
 [GregwarFormBundle]
     git=git://github.com/Gregwar/FormBundle.git
     target=/bundles/Gregwar/FormBundle
-
-[SonataDoctrineORMAdminBundle]
-    git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
-    target=/bundles/Sonata/DoctrineORMAdminBundle
 ```
 
 You also should install [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) and all dependencies for it.
@@ -77,6 +73,15 @@ shtumi_useful:
 ```
 
 ### Update your configuration
+
+## Add form theming to twig
+```
+twig:
+    ...
+    form:
+        resources:
+            - ShtumiUsefulBundle::fields.html.twig
+```
 
 Update your configuration in accordance with [using ShtumiUsefulBundle things](https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/index.rst)
 
