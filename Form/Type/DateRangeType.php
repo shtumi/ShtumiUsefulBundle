@@ -35,7 +35,13 @@ class DateRangeType extends AbstractType
     {
 
         if (!isset($options['default'])){
-            $dateRange = new DateRange($this->date_format);
+            if ($options['required']){
+                $dateRange = new DateRange($this->date_format);
+                $dateRange->createToDate(new \DateTime, $this->default_interval);
+            } else {
+                $dateRange = null;
+            }
+
         }
         else {
             $dateRange = $options['default'];
@@ -60,7 +66,7 @@ class DateRangeType extends AbstractType
     {
 
         $builder->appendClientTransformer(new DateRangeToValueTransformer(
-            $options['default']->date_format
+            $this->date_format
         ));
 
         $builder->setData($options['default']);
@@ -68,7 +74,8 @@ class DateRangeType extends AbstractType
         // Datepicker date format
         $searches = array('d', 'm', 'y', 'Y');
         $replaces = array('dd', 'mm', 'yy', 'yyyy');
-        $datepicker_format = str_replace($searches, $replaces, $options['default']->date_format);
+
+        $datepicker_format = str_replace($searches, $replaces, $this->date_format);
 
         $builder->setAttribute('datepicker_date_format', $datepicker_format);
     }
