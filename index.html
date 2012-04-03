@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Shtumiusefulbundle by shtumi</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Shtumiusefulbundle</h1>
+        <p>Symfony 2 bundle with some useful things - custom form types, dql functions, twig extensions, etc...</p>
+        <p class="view"><a href="https://github.com/shtumi/ShtumiUsefulBundle">View the Project on GitHub <small>shtumi/ShtumiUsefulBundle</small></a></p>
+        <ul>
+          <li><a href="https://github.com/shtumi/ShtumiUsefulBundle/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/shtumi/ShtumiUsefulBundle/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/shtumi/ShtumiUsefulBundle">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>ShtumiUsefulBundle - make typical things easier</h1>
+
+<p>ShtumiUsefulBundle provides some useful things that needed almost in every project. It's:</p>
+
+<p><strong>Form types</strong>:</p>
+
+<ul>
+<li><p><a href="https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/ajax_autocomplete.rst">Ajax Autocomplete form type</a> (useful when you operate with thousands and hundred thousands records [for instance: users])</p></li>
+<li><p><a href="https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/dependent_filtered_entity.rst">Dependent filtered form type</a> (useful when you need operate dependent entities in one form (for instance: countries/regions))</p></li>
+<li><p><a href="https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/daterange.rst">Date range form type</a> (allows you select date range with JS calendar and take valid DateRange object)</p></li>
+</ul><p><strong><a href="https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/dql_functions.rst">DQL extra functions</a></strong>:</p>
+
+<ul>
+<li><p>IFNULL</p></li>
+<li><p>ROUND</p></li>
+<li><p>DATE_DIFF</p></li>
+</ul><p>You can use Ajax autocomplete form type as a filter type with <a href="https://github.com/sonata-project/SonataAdminBundle">SonataAdminBundle</a></p>
+
+<h2>Installation</h2>
+
+<h3>Add the following lines to your  <code>deps</code> file and then run <code>php bin/vendors install</code>:</h3>
+
+<pre><code>[ShtumiUsefulBundle]
+    git=<a href="https://github.com/shtumi/ShtumiUsefulBundle.git">https://github.com/shtumi/ShtumiUsefulBundle.git</a>
+    target=bundles/Shtumi/UsefulBundle
+
+[GregwarFormBundle]
+    git=git://github.com/Gregwar/FormBundle.git
+    target=/bundles/Gregwar/FormBundle
+</code></pre>
+
+<p>You also should install <a href="https://github.com/sonata-project/SonataAdminBundle">SonataAdminBundle</a> and all dependencies for it.</p>
+
+<h3>Add ShtumiUsefulBundle to your application kernel</h3>
+
+<pre><code>    // app/AppKernel.php
+    public function registerBundles()
+    {
+        return array(
+            // ...
+            new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
+            new Gregwar\FormBundle\GregwarFormBundle(),
+            // ...
+        );
+    }
+</code></pre>
+
+<h3>Register the ShtumiUsefulBundle namespace</h3>
+
+<pre><code>    // app/autoload.php
+    $loader-&gt;registerNamespaces(array(
+        'Shtumi'            =&gt; __DIR__.'/../vendor/bundles',
+        'Gregwar'           =&gt; __DIR__.'/../vendor/bundles',
+        // your other namespaces
+    ));
+</code></pre>
+
+<h3>Import routes</h3>
+
+<p>// app/config/routing.yml</p>
+
+<pre><code>shtumi_useful:
+    resource: '@ShtumiUsefulBundle/Resources/config/routing.xml'
+</code></pre>
+
+<h3>Update your configuration</h3>
+
+<h4>Add form theming to twig</h4>
+
+<pre><code>twig:
+    ...
+    form:
+        resources:
+            - ShtumiUsefulBundle::fields.html.twig
+</code></pre>
+
+<p>Update your configuration in accordance with <a href="https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/index.rst">using ShtumiUsefulBundle things</a></p>
+
+<h3>Load jQuery to your views</h3>
+
+<pre><code>    &lt;script src="<a href="http://code.jquery.com/jquery-1.7.2.min.js">http://code.jquery.com/jquery-1.7.2.min.js</a>" type="text/javascript"&gt;&lt;/script&gt;
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/shtumi">shtumi</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
