@@ -13,6 +13,8 @@ ShtumiUsefulBundle provides some useful things that needed almost in every proje
 
 **[DQL extra functions](https://github.com/shtumi/ShtumiUsefulBundle/blob/master/Resources/doc/dql_functions.rst)**:
 
+* IF
+
 * IFNULL
 
 * ROUND
