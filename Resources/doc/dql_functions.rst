@@ -21,12 +21,21 @@ To use provided by ShtumiUsefulBundle DQL functions you should configure your do
                         datetime_functions:
                             datediff: Shtumi\UsefulBundle\DQL\DateDiff
                         numeric_functions:
+                            if: Shtumi\UsefulBundle\DQL\IfStatement
                             ifnull: Shtumi\UsefulBundle\DQL\IfNull
                             round: Shtumi\UsefulBundle\DQL\Round
 
 
 Usage
 =====
+
+IF
+------
+
+::
+
+    $em->createQuery('SELECT IF(s.a>s.b, s.a, s.b)
+                      FROM AcmeDemoBundle:Sale s')
 
 IFNULL
 ------
