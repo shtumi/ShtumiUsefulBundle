@@ -9,8 +9,10 @@ class DateRange
 
     private $daterange_separator;
 
+    /** @var \DateTime */
     public $dateStart;
 
+    /** @var \DateTime */
     public $dateEnd;
 
     public function __construct ($date_format='d/m/Y', $daterange_separator = ' - '){
