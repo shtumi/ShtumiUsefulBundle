@@ -33,22 +33,8 @@ class DateRangeType extends AbstractType
 
     public function getDefaultOptions(array $options)
     {
-
-        if (!isset($options['default'])){
-            if ($options['required']){
-                $dateRange = new DateRange($this->date_format);
-                $dateRange->createToDate(new \DateTime, $this->default_interval);
-            } else {
-                $dateRange = null;
-            }
-
-        }
-        else {
-            $dateRange = $options['default'];
-        }
-
         return array(
-            'default' => $dateRange
+            'default' => null
         );
     }
 
@@ -64,6 +50,22 @@ class DateRangeType extends AbstractType
 
     public function buildForm(FormBuilder $builder, array $options)
     {
+
+        if (!isset($options['default'])){
+            if ($options['required']){
+                $dateRange = new DateRange($this->date_format);
+                $dateRange->createToDate(new \DateTime, $this->default_interval);
+            } else {
+                $dateRange = null;
+            }
+
+        }
+        else {
+            $dateRange = $options['default'];
+        }
+
+        $options['default'] = $dateRange;
+
 
         $builder->appendClientTransformer(new DateRangeToValueTransformer(
             $this->date_format

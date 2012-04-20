@@ -33,10 +33,6 @@ You can use Ajax autocomplete form type as a filter type with [SonataAdminBundle
 [ShtumiUsefulBundle]
     git=https://github.com/shtumi/ShtumiUsefulBundle.git
     target=bundles/Shtumi/UsefulBundle
-
-[GregwarFormBundle]
-    git=git://github.com/Gregwar/FormBundle.git
-    target=/bundles/Gregwar/FormBundle
 ```
 
 You also should install [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) and all dependencies for it.
@@ -49,7 +45,6 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
         return array(
             // ...
             new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
-	        new Gregwar\FormBundle\GregwarFormBundle(),
             // ...
         );
     }
@@ -59,7 +54,6 @@ You also should install [SonataAdminBundle](https://github.com/sonata-project/So
     // app/autoload.php
     $loader->registerNamespaces(array(
         'Shtumi'            => __DIR__.'/../vendor/bundles',
-	    'Gregwar'           => __DIR__.'/../vendor/bundles',
         // your other namespaces
     ));
 ```

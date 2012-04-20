@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Shtumi\UsefulBundle\Form\DataTransformer;
 
@@ -8,53 +8,54 @@ use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class EntityToIdTransformer implements DataTransformerInterface
+class EntityToPropertyTransformer implements DataTransformerInterface
 {
-
     protected $em;
     protected $class;
+    protected $property;
     protected $unitOfWork;
 
-    public function __construct(EntityManager $em, $class)
+    public function __construct(EntityManager $em, $class, $property)
     {
         $this->em = $em;
         $this->unitOfWork = $this->em->getUnitOfWork();
         $this->class = $class;
+        $this->property = $property;
+
     }
 
     public function transform($entity)
     {
+        if (null === $entity) {
+            return null;
+        }
 
-        if (null === $entity || '' === $entity) {
-            return 'null';
-        }
-        if (!is_object($entity)) {
-            throw new UnexpectedTypeException($entity, 'object');
-        }
         if (!$this->unitOfWork->isInIdentityMap($entity)) {
             throw new FormException('Entities passed to the choice field must be managed');
         }
 
-        return $entity->getId();
+        if ($this->property) {
+            $propertyPath = new PropertyPath($this->property);
+            return $propertyPath->getValue($entity);
+        }
+
+        return current($this->unitOfWork->getEntityIdentifier($entity));
     }
 
-    public function reverseTransform($id)
+
+    public function reverseTransform($prop_value)
     {
-        if ('' === $id || null === $id) {
+        if (!$prop_value) {
             return null;
         }
 
-        if (!is_numeric($id))
-        {
-            throw new UnexpectedTypeException($id, 'numeric' . $id);
-        }
+        $em = $this->em;
+        $class = $this->class;
+        $repository = $em->getRepository($class);
 
-        $entity = $this->em->getRepository($this->class)->findOneById($id);
-
-        if ($entity === null) {
-            throw new TransformationFailedException(sprintf('The entity with key "%s" could not be found', $id));
-        }
+        $entity = $this->em->getRepository($this->class)->findOneBy(array($this->property => $prop_value));
 
         return $entity;
     }
 }
+

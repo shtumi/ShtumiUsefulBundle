@@ -21,20 +21,11 @@ class DependentFilteredEntityType extends AbstractType
 
     public function getDefaultOptions(array $options)
     {
-        $defaultOptions = array(
+        return array(
             'empty_value'       => '',
-
+            'entity_alias'      => null,
+            'parent_field'      => null
         );
-
-        $options = array_replace($defaultOptions, $options);
-
-        $entities = $this->container->getParameter('shtumi.dependent_filtered_entities');
-        $options['class'] = $entities[$options['entity_alias']]['class'];
-        $options['property'] = $entities[$options['entity_alias']]['property'];
-
-        $options['no_result_msg'] = $entities[$options['entity_alias']]['no_result_msg'];
-
-        return $options;
     }
 
     public function getParent(array $options)
@@ -49,10 +40,19 @@ class DependentFilteredEntityType extends AbstractType
 
     public function buildForm(FormBuilder $builder, array $options)
     {
+
+        $entities = $this->container->getParameter('shtumi.dependent_filtered_entities');
+        $options['class'] = $entities[$options['entity_alias']]['class'];
+        $options['property'] = $entities[$options['entity_alias']]['property'];
+
+        $options['no_result_msg'] = $entities[$options['entity_alias']]['no_result_msg'];
+
+
         $builder->prependClientTransformer(new EntityToIdTransformer(
             $this->container->get('doctrine')->getEntityManager(),
             $options['class']
         ));
+
 
         $builder->setAttribute("parent_field", $options['parent_field']);
         $builder->setAttribute("entity_alias", $options['entity_alias']);
