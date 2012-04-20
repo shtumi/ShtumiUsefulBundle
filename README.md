@@ -41,7 +41,7 @@ For Symfony 2.0 please use branch 2.0 of ShtumiUsefulBundle:
 [ShtumiUsefulBundle]
     git=https://github.com/shtumi/ShtumiUsefulBundle.git
     target=bundles/Shtumi/UsefulBundle
-    version=2.0
+    version=origin/2.0
 ```
 
 You also should install [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle) and all dependencies for it.
