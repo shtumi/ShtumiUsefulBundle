@@ -67,5 +67,9 @@ class DateRange
         $this->setData($dateStart, $dateEnd);
     }
 
+    public function getInterval()
+    {
+        return $this->dateEnd->diff($this->dateStart);
+    }
 
 }
