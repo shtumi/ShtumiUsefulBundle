@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Shtumi\UsefulBundle\Form\DataTransformer;
 
