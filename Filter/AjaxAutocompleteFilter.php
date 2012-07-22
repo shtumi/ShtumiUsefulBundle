@@ -14,6 +14,7 @@ namespace Shtumi\UsefulBundle\Filter;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class AjaxAutocompleteFilter extends Filter
 {
@@ -32,7 +33,7 @@ class AjaxAutocompleteFilter extends Filter
      * @param mixed $data
      * @return
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
@@ -44,7 +45,7 @@ class AjaxAutocompleteFilter extends Filter
         $this->handleScalar($queryBuilder, $alias, $field, $data);
     }
 
-    protected function handleScalar($queryBuilder, $alias, $field, $data)
+    protected function handleScalar(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
 
         if (empty($data['value'])) {
@@ -69,7 +70,7 @@ class AjaxAutocompleteFilter extends Filter
 
     }
 
-    protected function association($queryBuilder, $data)
+    protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
 
         $types = array(
