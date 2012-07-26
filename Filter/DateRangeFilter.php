@@ -16,7 +16,7 @@ use Sonata\AdminBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
-class AjaxAutocompleteFilter extends Filter
+class DateRangeFilter extends Filter
 {
 
     private $container;
@@ -39,10 +39,7 @@ class AjaxAutocompleteFilter extends Filter
             return;
         }
 
-        $entities = $this->container->getParameter('shtumi.autocomplete_entities');
-        $field = $entities[$this->getOption('entity_alias')]['property'];
-
-        $this->handleScalar($queryBuilder, $alias, $field, $data);
+        $this->handleScalar($queryBuilder, $alias, $this->getFieldName(), $data);
     }
 
     protected function handleScalar(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
@@ -59,12 +56,14 @@ class AjaxAutocompleteFilter extends Filter
 
         } else {
             if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, $alias.'.'.$field.' < :dateStart OR '.$alias.'.'.$field.' > :dateEnd');
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s >= :%s', $alias, $field, 'dateStart'));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s <= :%s', $alias, $field, 'dateEnd'));
             }
 
-            $queryBuilder->setParameter($this->getName(), $data['value']);
+            $queryBuilder->setParameter('dateStart', $data['value']->dateStart);
+            $queryBuilder->setParameter('dateEnd', $data['value']->dateEnd);
         }
 
 
@@ -88,17 +87,7 @@ class AjaxAutocompleteFilter extends Filter
             throw new \RunTimeException('please provide a field_name options');
         }
 
-        if (!$this->getOption('callback')){
-
-            $alias = 's_'.$this->getName();
-            $queryBuilder->leftJoin(sprintf('%s.%s', $queryBuilder->getRootAlias(), $this->getFieldName()), $alias);
-            return array($alias, 'id');
-
-        } else {
-
-            return array($this->getOption('alias', $queryBuilder->getRootAlias()), false);
-
-        };
+        return array($this->getOption('alias', $queryBuilder->getRootAlias()), false);
 
     }
 
@@ -107,7 +96,7 @@ class AjaxAutocompleteFilter extends Filter
         return array(
             'mapping_type' => ClassMetadataInfo::MANY_TO_ONE,
             'field_name'   => false,
-            'field_type'   => 'shtumi_ajax_autocomplete',
+            'field_type'   => 'shtumi_daterange',
             'field_options' => array(),
             'operator_type' => 'sonata_type_boolean',
             'operator_options' => array(),
@@ -117,7 +106,7 @@ class AjaxAutocompleteFilter extends Filter
 
     public function getRenderSettings()
     {
-        $options = array_merge($this->getFieldOptions(), array('entity_alias' => $this->getOption('entity_alias')));
+        $options = $this->getFieldOptions();
 
         return array('sonata_type_filter_default', array(
             'field_type'    => $this->getFieldType(),
