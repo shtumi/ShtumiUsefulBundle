@@ -16,7 +16,7 @@ You should configure relationship between master and dependent fields for each p
 // app/config/config.yml
 
 ::
-
+shtumi_useful :
     dependent_filtered_entities:
         region_by_country:
             class: AcmeDemoBundle:Region
