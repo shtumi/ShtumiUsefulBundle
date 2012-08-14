@@ -42,6 +42,8 @@ class Configuration implements ConfigurationInterface
                                 ->defaultValue('begins_with')
                                 ->cannotBeEmpty()
                             ->end()
+                            ->booleanNode('auto_focus')
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
