@@ -16,16 +16,17 @@ You should configure relationship between master and dependent fields for each p
 // app/config/config.yml
 
 ::
-shtumi_useful :
-    dependent_filtered_entities:
-        region_by_country:
-            class: AcmeDemoBundle:Region
-            parent_property: country
-            property: title
-            role: ROLE_USER
-            no_result_msg: 'No regions found for that country'
-            order_property: title
-            order_direction: ASC
+
+    shtumi_useful :
+        dependent_filtered_entities:
+            region_by_country:
+                class: AcmeDemoBundle:Region
+                parent_property: country
+                property: title
+                role: ROLE_USER
+                no_result_msg: 'No regions found for that country'
+                order_property: title
+                order_direction: ASC
 
 - **class** - Doctrine dependent entity.
 - **role** - User role to use form type. Default: ``IS_AUTHENTICATED_ANONYMOUSLY``. It needs for security reason.
