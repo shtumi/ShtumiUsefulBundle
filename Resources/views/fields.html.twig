@@ -1,4 +1,4 @@
-{% block type_ajax_autocomplete_widget %}
+{% block shtumi_type_ajax_autocomplete_widget %}
 
     <script type="text/javascript">
         if (typeof jQuery.ui == 'undefined'){
@@ -65,7 +65,7 @@
 {% endblock %}
 
 
-{% block dependent_filtered_entity_widget %}
+{% block shtumi_dependent_filtered_entity_widget %}
 
     <select {{ block('widget_attributes') }}></select>
 
@@ -111,7 +111,7 @@
 {% endblock %}
 
 
-{% block daterange_widget %}
+{% block shtumi_daterange_widget %}
 
     <style type="text/css">@import "{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.css') }}";</style>
     <style type="text/css">@import "{{ asset('bundles/shtumiuseful/css/daterange.css') }}";</style>
