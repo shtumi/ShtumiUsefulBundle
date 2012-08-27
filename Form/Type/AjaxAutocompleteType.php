@@ -63,11 +63,17 @@ class AjaxAutocompleteType extends AbstractType
         ));
 
         $builder->setAttribute('entity_alias', $options['entity_alias']);
+        if (isset($entities[$options['entity_alias']]['auto_focus']) && $entities[$options['entity_alias']]['auto_focus'] === true) {
+            $builder->setAttribute('auto_focus', true);
+        } else {
+            $builder->setAttribute('auto_focus', false);
+        }
     }
 
     public function buildView(FormView $view, FormInterface $form)
     {
         $view->set('entity_alias',  $form->getAttribute('entity_alias'));
+        $view->set('auto_focus',  $form->getAttribute('auto_focus'));
     }
 
 }

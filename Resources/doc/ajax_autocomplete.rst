@@ -34,6 +34,7 @@ You should configure each autocomplete filter:
    - *begins_with* - LIKE 'value%' (**default**)
    - *ends_with* - LIKE '%value'
    - *contains*  - LIKE '%value%'
+- **auto_focus** - boolean - mimics the gmail autocomplete. autoselects first match so you can hit enter and have field filled in easy.
 
 
 Usage
