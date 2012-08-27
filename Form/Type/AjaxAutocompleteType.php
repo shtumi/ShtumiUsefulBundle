@@ -2,13 +2,14 @@
 
 namespace Shtumi\UsefulBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Exception\FormException;
 use Shtumi\UsefulBundle\Form\DataTransformer\EntityToPropertyTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AjaxAutocompleteType extends AbstractType
 {
@@ -20,26 +21,26 @@ class AjaxAutocompleteType extends AbstractType
         $this->container = $container;
     }
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'entity_alias'      => null,
             'class'             => null,
             'property'          => null
-        );
+        ));
     }
 
     public function getName()
     {
-        return 'type_ajax_autocomplete';
+        return 'shtumi_type_ajax_autocomplete';
     }
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'text';
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $entities = $this->container->getParameter('shtumi.autocomplete_entities');
@@ -65,7 +66,7 @@ class AjaxAutocompleteType extends AbstractType
         $builder->setAttribute('entity_alias', $options['entity_alias']);
     }
 
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->set('entity_alias',  $form->getAttribute('entity_alias'));
     }
