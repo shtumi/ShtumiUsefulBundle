@@ -9,7 +9,7 @@
     </route>
 
     <route id="shtumi_dependent_filtered_entity" pattern="/shtumi_dependent_filtered_entity">
-        <default key="_controller">ShtumiUsefulBundle:DependentFilteredEntity:getOptions</default>
+        <default key="_controller">%shtumi_dependent_filtered_entity_controller_route%</default>
     </route>
 
 </routes>
