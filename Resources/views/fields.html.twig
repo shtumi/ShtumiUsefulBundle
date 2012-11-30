@@ -91,17 +91,16 @@
                                 if ($(option).val() == selected_index)
                                     $(option).attr('selected', 'selected');
                             })
+                            $("select#{{ form.getVars().id }}").trigger('change');
                             $("#loader").hide();
-                        }
-                        else
-                        {
+                        } else {
                             $("select#{{ form.getVars().id }}").html('<em>{{ no_result_msg|trans() }}</em>');
                             $("#loader").hide();
                         }
                     },
                     error: function(xhr, ajaxOptions, thrownError){
                     $('html').html(xhr.responseText);
-                    } 
+                    }
                 });
             });
             $("select#{{ form.parent.getChild( parent_field ).getVars().id }}").trigger('change');
