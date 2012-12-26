@@ -55,44 +55,6 @@ class EntityToPropertyTransformer implements DataTransformerInterface
 
         $entity = $this->em->getRepository($this->class)->findOneBy(array($this->property => $prop_value));
 
-        if (is_null($entity)) {
-                    // TODO: write it properly - reverse class from alias.
-                    //ref: https://github.com/doctrine/DoctrineBundle/edit/master/Command/GenerateEntitiesDoctrineCommand.php
-                    //$name = $this->class;
-                    //if (false !== $pos = strpos($name, ':')) {
-                    //    $name = $this->getContainer()->get('doctrine')->getEntityNamespace(substr($name, 0, $pos)).'\\'.substr($name, $pos + 1);
-                    //}
-                    //echo $name;
-                    //exit;
-                    $baseClass = substr($this->class, strrpos($this->class, ':')+1);
-                    $className = '\\PR\\Sportex\\AdminBundle\\Entity\\' . $baseClass;
-                    //echo 'AdD: ' . $className;
-                    $newEntity = new $className;
-                    $setter = 'set' . ucfirst($this->property);
-            if (method_exists($newEntity, 'setCountry')) {
-                            $newEntity->setCountry($this->em->getRepository('\\PR\\Sportex\\AdminBundle\\Entity\\Country')->findOneBy(array('cName' => 'Undefined')));
-            }
-            // TODO: write it properly - make autocomplete with dependent entities and be able to identify what to get from there...
-            if (method_exists($newEntity, 'setSport')) {
-
-                foreach($_POST as $k => $n) {
-                    if(is_array($n)) {
-                        foreach($n as $kk => $nn) {
-                            if ($kk == 'sport') {
-                                $sportId = $nn;
-                            }
-                        }
-                    }
-                }
-                $newEntity->setSport($this->em->getRepository('\\PR\\Sportex\\AdminBundle\\Entity\\Sport')->findOneBy(array('id' => $sportId)));
-            }
-            $newEntity->$setter($prop_value);
-            $this->em->persist($newEntity);
-            $this->em->flush();
-        }
-        $entity = $this->em->getRepository($this->class)->findOneBy(array($this->property => $prop_value));
-
-
         return $entity;
     }
 }
