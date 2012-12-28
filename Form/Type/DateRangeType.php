@@ -34,7 +34,8 @@ class DateRangeType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'default' => null
+            'default' => null,
+            'compound' => false,
         ));
     }
 

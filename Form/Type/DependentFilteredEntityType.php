@@ -24,7 +24,8 @@ class DependentFilteredEntityType extends AbstractType
         $resolver->setDefaults(array(
             'empty_value'       => '',
             'entity_alias'      => null,
-            'parent_field'      => null
+            'parent_field'      => null,
+            'compound'          => false
         ));
     }
 

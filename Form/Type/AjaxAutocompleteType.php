@@ -26,7 +26,8 @@ class AjaxAutocompleteType extends AbstractType
         $resolver->setDefaults(array(
             'entity_alias'      => null,
             'class'             => null,
-            'property'          => null
+            'property'          => null,
+            'compound'          => false
         ));
     }
 
