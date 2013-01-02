@@ -58,13 +58,13 @@ class AjaxAutocompleteFilter extends Filter
             call_user_func($callback, $queryBuilder, $alias, $field, $data);
 
         } else {
-            if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO -1) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $this->getName()));
+            if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO) {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, 'id', $this->getName()));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, 'id', $this->getName()));
             }
 
-            $queryBuilder->setParameter($this->getName(), $data['value']);
+            $queryBuilder->setParameter($this->getName(), $data['value']->getId());
         }
 
 
