@@ -31,28 +31,39 @@ class AjaxAutocompleteJSONController extends Controller
         $letters = $request->get('letters');
         $maxRows = $request->get('maxRows');
 
-        switch ($entity_inf['search']){
-            case "begins_with":
-                $like = $letters . '%';
-            break;
-            case "ends_with":
-                $like = '%' . $letters;
-            break;
-            case "contains":
-                $like = '%' . $letters . '%';
-            break;
-            default:
-                throw new \Exception('Unexpected value of parameter "search"');
-        }
 
-        $results = $em->createQuery(
-            'SELECT e.' . $entity_inf['property'] . '
-             FROM ' . $entity_inf['class'] . ' e
-             WHERE e.' . $entity_inf['property'] . ' LIKE :like
-             ORDER BY e.' . $entity_inf['property'])
-            ->setParameter('like', $like )
-            ->setMaxResults($maxRows)
-            ->getScalarResult();
+        if (trim($letters) != "") {
+            switch ($entity_inf['search']){
+                case "begins_with":
+                    $like = $letters . '%';
+                break;
+                case "ends_with":
+                    $like = '%' . $letters;
+                break;
+                case "contains":
+                    $like = '%' . $letters . '%';
+                break;
+                default:
+                    throw new \Exception('Unexpected value of parameter "search"');
+            } 
+            
+            $results = $em->createQuery(
+                'SELECT e.' . $entity_inf['property'] . '
+                 FROM ' . $entity_inf['class'] . ' e
+                 WHERE e.' . $entity_inf['property'] . ' LIKE :like
+                 ORDER BY e.' . $entity_inf['property'])
+                ->setParameter('like', $like )
+                ->setMaxResults($maxRows)
+                ->getScalarResult();        
+        } else {
+            // Allow all search / empty search.
+            $results = $em->createQuery(
+                'SELECT e.' . $entity_inf['property'] . '
+                 FROM ' . $entity_inf['class'] . ' e
+                 ORDER BY e.' . $entity_inf['property'])
+                ->setMaxResults($maxRows)
+                ->getScalarResult();                  
+        }
 
         $res = array();
         foreach ($results AS $r){

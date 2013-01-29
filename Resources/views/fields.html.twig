@@ -30,7 +30,7 @@
                         }
                     });
                 },
-                minLength: 2,
+                minLength: 1,
                 open: function() {
                     $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
                 },
@@ -60,7 +60,34 @@
     </style>
 
 
-    {{ form_widget(form) }}
+    {% if sonata_admin.field_description %}
+        <div id="field_container_{{ id }}" class="field-container">
+            <span id="field_widget_{{ id }}" >
+                {{ form_widget(form) }}
+            </span>
+
+            <span id="field_actions_{{ id }}" class="field-actions">
+                {% if sonata_admin.field_description.associationadmin.hasRoute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') %}
+                    <a
+                        href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
+                        onclick="return start_field_dialog_form_add_{{ id }}(this);"
+                        class="btn sonata-ba-action"
+                        title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
+                        >
+                        <i class="icon-plus"></i>
+                        {{ 'link_add'|trans({}, 'SonataAdminBundle') }}
+                    </a>
+                {% endif %}
+            </span>
+
+            <div style="display: none" id="field_dialog_{{ id }}"></div>
+        </div>
+
+        {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
+    
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
 
 {% endblock %}
 
