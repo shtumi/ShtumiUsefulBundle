@@ -1,30 +1,30 @@
-/* http://keith-wood.name/datepick.html
+﻿/* http://keith-wood.name/datepick.html
    Korean localisation for jQuery Datepicker.
-   Written by DaeKwon Kang (ncrash.dk@gmail.com). */
+   Written by DaeKwon Kang (ncrash.dk@gmail.com), Edited by Genie. */
 (function($) {
 	$.datepick.regional['ko'] = {
-		monthNames: ['1월(JAN)','2월(FEB)','3월(MAR)','4월(APR)','5월(MAY)','6월(JUN)',
-		'7월(JUL)','8월(AUG)','9월(SEP)','10월(OCT)','11월(NOV)','12월(DEC)'],
-		monthNamesShort: ['1월(JAN)','2월(FEB)','3월(MAR)','4월(APR)','5월(MAY)','6월(JUN)',
-		'7월(JUL)','8월(AUG)','9월(SEP)','10월(OCT)','11월(NOV)','12월(DEC)'],
-		dayNames: ['일','월','화','수','목','금','토'],
+		monthNames: ['1월','2월','3월','4월','5월','6월',
+		'7월','8월','9월','10월','11월','12월'],
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월',
+		'7월','8월','9월','10월','11월','12월'],
+		dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
 		dayNamesShort: ['일','월','화','수','목','금','토'],
 		dayNamesMin: ['일','월','화','수','목','금','토'],
 		dateFormat: 'yyyy-mm-dd', firstDay: 0,
 		renderer: $.extend({}, $.datepick.defaultRenderer,
 			{month: $.datepick.defaultRenderer.month.
-				replace(/monthHeader/, 'monthHeader:MM yyyy년')}),
-		prevText: '이전달', prevStatus: '',
-		prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
-		nextText: '다음달', nextStatus: '',
-		nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
-		currentText: '오늘', currentStatus: '',
-		todayText: '오늘', todayStatus: '',
-		clearText: '지우기', clearStatus: '',
+				replace(/monthHeader/, 'monthHeader:yyyy년 MM')}),
+		prevText: '이전달', prevStatus: '이전달을 표시합니다',
+		prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '이전 연도를 표시합니다',
+		nextText: '다음달', nextStatus: '다음달을 표시합니다',
+		nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '다음 연도를 표시합니다',
+		currentText: '현재', currentStatus: '입력한 달을 표시합니다',
+		todayText: '오늘', todayStatus: '이번달을 표시합니다',
+		clearText: '지우기', clearStatus: '입력한 날짜를 지웁니다',
 		closeText: '닫기', closeStatus: '',
-		yearStatus: '', monthStatus: '',
-		weekText: 'Wk', weekStatus: '',
-		dayStatus: 'D, M d', defaultStatus: '',
+		yearStatus: '표시할 연도를 변경합니다', monthStatus: '표시할 월을 변경합니다',
+		weekText: 'Wk', weekStatus: '해당 연도의 주차',
+		dayStatus: 'M d일 (D)', defaultStatus: '날짜를 선택하세요',
 		isRTL: false
 	};
 	$.datepick.setDefaults($.datepick.regional['ko']);

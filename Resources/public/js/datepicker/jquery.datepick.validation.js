@@ -1,5 +1,5 @@
 ﻿/* http://keith-wood.name/datepick.html
-   Datepicker Validation extension for jQuery 4.0.6.
+   Datepicker Validation extension for jQuery 4.1.0.
    Requires Jörn Zaefferer's Validation plugin (http://plugins.jquery.com/project/validate).
    Written by Keith Wood (kbwood{at}iinet.com.au).
    Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
@@ -38,7 +38,7 @@ if ($.fn.validate) {
 		   @param  elem    (element) the selected datepicker element */
 		selectDate: function(target, elem) {
 			this.selectDateOrig(target, elem);
-			var inst = $.data(target, $.datepick.dataName);
+			var inst = $.data(target, $.datepick.propertyName);
 			if (!inst.inline && $.fn.validate) {
 				var validation = $(target).parents('form').validate();
 				if (validation) {
@@ -51,9 +51,9 @@ if ($.fn.validate) {
 		   @param  error    (jQuery) the error message
 		   @param  element  (jQuery) the field in error */
 		errorPlacement: function(error, element) {
-			var inst = $.data(element[0], $.datepick.dataName);
+			var inst = $.data(element[0], $.datepick.propertyName);
 			if (inst) {
-				error[inst.get('isRTL') ? 'insertBefore' : 'insertAfter'](
+				error[inst.options.isRTL ? 'insertBefore' : 'insertAfter'](
 					inst.trigger.length > 0 ? inst.trigger : element);
 			}
 			else {
@@ -67,7 +67,7 @@ if ($.fn.validate) {
 		   @return  (string) the formatted message */
 		errorFormat: function(source, params) {
 			var format = ($.datepick.curInst ?
-				$.datepick.curInst.get('dateFormat') :
+				$.datepick.curInst.options.dateFormat :
 				$.datepick._defaults.dateFormat);
 			$.each(params, function(index, value) {
 				source = source.replace(new RegExp('\\{' + index + '\\}', 'g'),
@@ -85,7 +85,7 @@ if ($.fn.validate) {
 			return this.optional(element) || validateEach(value, element);
 		},
 		function(params) {
-			var inst = $.data(lastElement, $.datepick.dataName);
+			var inst = $.data(lastElement, $.datepick.propertyName);
 			var minDate = inst.get('minDate');
 			var maxDate = inst.get('maxDate');
 			var messages = $.datepick._defaults;
@@ -101,17 +101,15 @@ if ($.fn.validate) {
 	   @param  element  (element) the field control
 	   @return  (boolean) true if OK, false if failed validation */
 	function validateEach(value, element) {
-		var inst = $.data(element, $.datepick.dataName);
-		var rangeSelect = inst.get('rangeSelect');
-		var multiSelect = inst.get('multiSelect');
-		var dates = (multiSelect ? value.split(inst.get('multiSeparator')) :
-			(rangeSelect ? value.split(inst.get('rangeSeparator')) : [value]));
-		var ok = (multiSelect && dates.length <= multiSelect) ||
-			(!multiSelect && rangeSelect && dates.length == 2) ||
-			(!multiSelect && !rangeSelect && dates.length == 1);
+		var inst = $.data(element, $.datepick.propertyName);
+		var dates = (inst.options.multiSelect ? value.split(inst.options.multiSeparator) :
+			(inst.options.rangeSelect ? value.split(inst.options.rangeSeparator) : [value]));
+		var ok = (inst.options.multiSelect && dates.length <= inst.options.multiSelect) ||
+			(!inst.options.multiSelect && inst.options.rangeSelect && dates.length == 2) ||
+			(!inst.options.multiSelect && !inst.options.rangeSelect && dates.length == 1);
 		if (ok) {
 			try {
-				var dateFormat = inst.get('dateFormat');
+				var dateFormat = inst.options.dateFormat;
 				var minDate = inst.get('minDate');
 				var maxDate = inst.get('maxDate');
 				var dp = $(element);
@@ -126,7 +124,7 @@ if ($.fn.validate) {
 				ok = false;
 			}
 		}
-		if (ok && rangeSelect) {
+		if (ok && inst.options.rangeSelect) {
 			ok = (dates[0].getTime() <= dates[1].getTime());
 		}
 		return ok;
@@ -175,11 +173,11 @@ if ($.fn.validate) {
 		},
 		function(params) {
 			var messages = $.datepick._defaults;
-			var inst = $.data(lastElement, $.datepick.dataName);
+			var inst = $.data(lastElement, $.datepick.propertyName);
 			params = normaliseParams(params);
 			var thatDate = extractOtherDate(lastElement, params[1], true);
 			thatDate = (params[1] == 'today' ? messages.validateDateToday : (thatDate.length ?
-				$.datepick.formatDate(inst.get('dateFormat'), thatDate[0], inst.getConfig()) :
+				$.datepick.formatDate(inst.options.dateFormat, thatDate[0], inst.getConfig()) :
 				messages.validateDateOther));
 			return messages.validateDateCompare.replace(/\{0\}/,
 				messages['validateDate' + (comparisons[params[0]] || params[0]).toUpperCase()]).
@@ -213,11 +211,11 @@ if ($.fn.validate) {
 		if (source.constructor == Date) {
 			return [source];
 		}
-		var inst = $.data(element, $.datepick.dataName);
+		var inst = $.data(element, $.datepick.propertyName);
 		var thatDate = null;
 		try {
 			if (typeof source == 'string' && source != 'today') {
-				thatDate = $.datepick.parseDate(inst.get('dateFormat'), source, inst.getConfig());
+				thatDate = $.datepick.parseDate(inst.options.dateFormat, source, inst.getConfig());
 			}
 		}
 		catch (e) {

@@ -90,5 +90,5 @@ Update your configuration in accordance with [using ShtumiUsefulBundle things](h
 
 ### Load jQuery to your views
 ```
-    <script src="http://code.jquery.com/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
 ```

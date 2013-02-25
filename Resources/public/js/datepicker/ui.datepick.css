@@ -1,4 +1,4 @@
-/* ThemeRoller override style sheet for jQuery date picker v4.0.6. */
+/* ThemeRoller override style sheet for jQuery date picker v4.1.0. */
 .ui-datepicker {
 	display: block;
 }
@@ -72,6 +72,7 @@ button.ui-datepicker-cmd {
 }
 .ui-datepicker-row-break {
 	width: 100%;
+	font-size: 100%;
 }
 .ui-datepicker-group {
 	float: left;

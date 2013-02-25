@@ -12,17 +12,17 @@
 		dayNamesMin: ['Du','Lu','Ma','Mi','Jo','Vi','Sâ'],
 		dateFormat: 'dd.mm.yyyy', firstDay: 1,
 		renderer: $.datepick.defaultRenderer,
-		prevText: '&laquo;Precedenta', prevStatus: 'Arata luna precedenta',
+		prevText: '&laquo;Precedentă', prevStatus: 'Arată luna precedenta',
 		prevJumpText: '&laquo;&laquo;', prevJumpStatus: '',
-		nextText: 'Urmatoare&raquo;', nextStatus: 'Arata luna urmatoare',
+		nextText: 'Urmatoare&raquo;', nextStatus: 'Arată luna urmatoare',
 		nextJumpText: '&raquo;&raquo;', nextJumpStatus: '',
-		currentText: 'Azi', currentStatus: 'Arata luna curenta',
-		todayText: 'Azi', todayStatus: 'Arata luna curenta',
+		currentText: 'Azi', currentStatus: 'Arată luna curenta',
+		todayText: 'Azi', todayStatus: 'Arată luna curenta',
 		clearText: 'Curat', clearStatus: 'Sterge data curenta',
 		closeText: 'Închide', closeStatus: 'Închide fara schimbare',
-		yearStatus: 'Arat un an diferit', monthStatus: 'Arata o luna diferita',
+		yearStatus: 'Arată un an diferit', monthStatus: 'Arată o luna diferita',
 		weekText: 'Săpt', weekStatus: 'Săptamana anului',
-		dayStatus: 'Selecteaza D, M d', defaultStatus: 'Selecteaza o data',
+		dayStatus: 'Selectează D, M d', defaultStatus: 'Selectează o data',
 		isRTL: false
 	};
 	$.datepick.setDefaults($.datepick.regional['ro']);

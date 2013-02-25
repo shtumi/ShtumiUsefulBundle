@@ -1,5 +1,5 @@
 ﻿/* http://keith-wood.name/datepick.html
-   Datepicker extensions for jQuery v4.0.6.
+   Datepicker extensions for jQuery v4.1.0.
    Written by Keith Wood (kbwood{at}iinet.com.au) August 2009.
    Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
    MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
@@ -94,14 +94,16 @@ $.extend($.datepick, {
 	                    this refers to the target input or division */
 	hoverCallback: function(onHover) {
 		return function(picker, inst) {
-			var target = this;
-			var renderer = inst.get('renderer');
-			picker.find(renderer.daySelector + ' a, ' + renderer.daySelector + ' span').
-				hover(function() {
-					onHover.apply(target, [$.datepick.retrieveDate(target, this),
-						this.nodeName.toLowerCase() == 'a']);
-				},
-				function() { onHover.apply(target, []); });
+			if ($.isFunction(onHover)) {
+				var target = this;
+				picker.find(inst.options.renderer.daySelector + ' a, ' +
+						inst.options.renderer.daySelector + ' span').
+					hover(function() {
+						onHover.apply(target, [$(target).datepick('retrieveDate', this),
+							this.nodeName.toLowerCase() == 'a']);
+					},
+					function() { onHover.apply(target, []); });
+			}
 		};
 	},
 
@@ -111,7 +113,7 @@ $.extend($.datepick, {
 	   @param  inst    (object) the current instance settings */
 	highlightWeek: function(picker, inst) {
 		var target = this;
-		var renderer = inst.get('renderer');
+		var renderer = inst.options.renderer;
 		picker.find(renderer.daySelector + ' a, ' + renderer.daySelector + ' span').
 			hover(function() {
 				$(this).parents('tr').find(renderer.daySelector + ' *').
@@ -128,9 +130,8 @@ $.extend($.datepick, {
 	   @param  picker  (jQuery) the completed datepicker division
 	   @param  inst    (object) the current instance settings */
 	showStatus: function(picker, inst) {
-		var renderer = inst.get('renderer');
-		var isTR = (renderer.selectedClass == themeRollerRenderer.selectedClass);
-		var defaultStatus = inst.get('defaultStatus') || '&nbsp;';
+		var isTR = (inst.options.renderer.selectedClass == themeRollerRenderer.selectedClass);
+		var defaultStatus = inst.options.defaultStatus || '&nbsp;';
 		var status = $('<div class="' + (!isTR ? 'datepick-status' :
 			'ui-datepicker-status ui-widget-header ui-helper-clearfix ui-corner-all') + '">' +
 			defaultStatus + '</div>').
@@ -149,22 +150,19 @@ $.extend($.datepick, {
 	   @param  inst    (object) the current instance settings */
 	monthNavigation: function(picker, inst) {
 		var target = $(this);
-		var renderer = inst.get('renderer');
-		var isTR = (renderer.selectedClass == themeRollerRenderer.selectedClass);
+		var isTR = (inst.options.renderer.selectedClass == themeRollerRenderer.selectedClass);
 		var minDate = inst.curMinDate();
 		var maxDate = inst.get('maxDate');
-		var monthNames = inst.get('monthNames');
-		var monthNamesShort = inst.get('monthNamesShort');
 		var month = inst.drawDate.getMonth();
 		var year = inst.drawDate.getFullYear();
 		var html = '<div class="' + (!isTR ? 'datepick-month-nav' : 'ui-datepicker-month-nav') + '"' +
 			' style="display: none;">';
-		for (var i = 0; i < monthNames.length; i++) {
+		for (var i = 0; i < inst.options.monthNames.length; i++) {
 			var inRange = ((!minDate || new Date(year, i + 1, 0).getTime() >= minDate.getTime()) &&
 				(!maxDate || new Date(year, i, 1).getTime() <= maxDate.getTime()));
 			html += '<div>' +
 				(inRange ? '<a href="#" class="dp' + new Date(year, i, 1).getTime() + '"' : '<span') +
-				' title="' + monthNames[i] + '">' + monthNamesShort[i] +
+				' title="' + inst.options.monthNames[i] + '">' + inst.options.monthNamesShort[i] +
 				(inRange ? '</a>' : '</span>') + '</div>';
 		}
 		for (var i = -6; i <= 6; i++) {
@@ -182,7 +180,7 @@ $.extend($.datepick, {
 		html += '</div>';
 		html = $(html).insertAfter(picker.find('div.datepick-nav,div.ui-datepicker-header:first'));
 		html.find('a').click(function() {
-				var date = $.datepick.retrieveDate(target[0], this);
+				var date = target.datepick('retrieveDate', this);
 				target.datepick('showMonth', date.getFullYear(), date.getMonth() + 1);
 				return false;
 			});
@@ -208,7 +206,7 @@ $.extend($.datepick, {
 					for (var i = 1; i < 7; i++) {
 						dates.push(date = $.datepick.add($.datepick.newDate(date), 1, 'd'));
 					}
-					if (inst.get('rangeSelect')) {
+					if (inst.options.rangeSelect) {
 						dates.splice(1, dates.length - 2);
 					}
 					target.datepick('setDate', dates).datepick('hide');
@@ -236,7 +234,7 @@ $.extend($.datepick, {
 					for (var i = 1; i < dim; i++) {
 						dates.push(date = $.datepick.add($.datepick.newDate(date), 1, 'd'));
 					}
-					if (inst.get('rangeSelect')) {
+					if (inst.options.rangeSelect) {
 						dates.splice(1, dates.length - 2);
 					}
 					target.datepick('setDate', dates).datepick('hide');
