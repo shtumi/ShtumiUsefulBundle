@@ -34,7 +34,7 @@ You should configure each autocomplete filter:
    - *begins_with* - LIKE 'value%' (**default**)
    - *ends_with* - LIKE '%value'
    - *contains*  - LIKE '%value%'
-
+- **case_insensitive** - Whether or not matching should be case sensitive or not
 
 Usage
 =====
