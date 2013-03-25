@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('search')
                                 ->defaultValue('begins_with')
                                 ->cannotBeEmpty()
+                            ->end()
 			    ->booleanNode('case_insensitive')
                                  ->defaultTrue()
                             ->end()
