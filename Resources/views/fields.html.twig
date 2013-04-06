@@ -89,7 +89,7 @@
                             jQuery("select#{{ form.getVars().id }}").html(msg).show();
                             jQuery.each(jQuery("select#{{ form.getVars().id }} option"), function (index, option){
                                 if (jQuery(option).val() == selected_index)
-                                    jQuery(option).attr('selected', 'selected');
+                                    jQuery(option).prop('selected', true);
                             })
                             jQuery("select#{{ form.getVars().id }}").trigger('change');
                             jQuery("#loader").hide();
