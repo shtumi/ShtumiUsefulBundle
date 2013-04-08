@@ -56,7 +56,7 @@ class DependentFilteredEntityController extends Controller
         }
 
         $html = '';
-        if ($empty_value)
+        if ($empty_value !== false)
             $html .= '<option value="">' . $translator->trans($empty_value) . '</option>';
 
         $getter =  $this->getGetterName($entity_inf['property']);
