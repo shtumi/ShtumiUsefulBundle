@@ -21,6 +21,7 @@ You should configure each autocomplete filter:
                 class: AcmeDemoBundle:User
                 role: ROLE_ADMIN
                 property: email
+                shown_properties: [email, firstname]
 
             products:
                 class: AcmeDemoBundle:Product
@@ -29,7 +30,10 @@ You should configure each autocomplete filter:
 
 - **class** - Doctrine model.
 - **role** - User role to use form type. Default: *IS_AUTHENTICATED_ANONYMOUSLY*. It needs for security reason.
-- **property** - Property that will be prompted by autocomplete. Default: *title*.
+- **property** - Property that will be used for search by autocomplete. Default: *title*.
+- **properties** - Properties that will be prompted by autocomplete, separated by a dash. *No default*
+From the previous example could be prompted : "yourmail@domain.fr - John"
+You can add as many properties as you need.
 - **search** - LIKE format to get autocomplete values. You can use:
    - *begins_with* - LIKE 'value%' (**default**)
    - *ends_with* - LIKE '%value'
