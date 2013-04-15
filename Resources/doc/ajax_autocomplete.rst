@@ -31,9 +31,9 @@ You should configure each autocomplete filter:
 - **class** - Doctrine model.
 - **role** - User role to use form type. Default: *IS_AUTHENTICATED_ANONYMOUSLY*. It needs for security reason.
 - **property** - Property that will be used for search by autocomplete. Default: *title*.
-- **properties** - Properties that will be prompted by autocomplete, separated by a dash. *No default*
-From the previous example could be prompted : "yourmail@domain.fr - John"
-You can add as many properties as you need.
+- **properties** - Properties that will be prompted by autocomplete, separated by a dash. *No default*.
+    - You can add as many properties as you need
+    - From the previous config.yml could be prompted : "yourmail@domain.fr - John"
 - **search** - LIKE format to get autocomplete values. You can use:
    - *begins_with* - LIKE 'value%' (**default**)
    - *ends_with* - LIKE '%value'
