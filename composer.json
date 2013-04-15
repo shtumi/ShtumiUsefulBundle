@@ -1,5 +1,5 @@
 {
-    "name": "shtumi/useful-bundle",
+    "name": "batsaxiv/useful-bundle",
     "type": "symfony-bundle",
     "description": "Symfony ShtumiUsefulBundle",
     "keywords": ["Ajax Autocomplete form type", "Dependent filtered form type", "daterange", "shtumi"],
