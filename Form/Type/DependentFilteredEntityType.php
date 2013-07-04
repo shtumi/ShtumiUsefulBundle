@@ -48,12 +48,10 @@ class DependentFilteredEntityType extends AbstractType
 
         $options['no_result_msg'] = $entities[$options['entity_alias']]['no_result_msg'];
 
-
-        $builder->prependClientTransformer(new EntityToIdTransformer(
+        $builder->addViewTransformer(new EntityToIdTransformer(
             $this->container->get('doctrine')->getEntityManager(),
             $options['class']
-        ));
-
+        ), true);
 
         $builder->setAttribute("parent_field", $options['parent_field']);
         $builder->setAttribute("entity_alias", $options['entity_alias']);
@@ -64,10 +62,10 @@ class DependentFilteredEntityType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('parent_field', $form->getAttribute('parent_field'));
-        $view->set('entity_alias', $form->getAttribute('entity_alias'));
-        $view->set('no_result_msg', $form->getAttribute('no_result_msg'));
-        $view->set('empty_value', $form->getAttribute('empty_value'));
+        $view->vars['parent_field'] = $form->getConfig()->getAttribute('parent_field');
+        $view->vars['entity_alias'] = $form->getConfig()->getAttribute('entity_alias');
+        $view->vars['no_result_msg'] = $form->getConfig()->getAttribute('no_result_msg');
+        $view->vars['empty_value'] = $form->getConfig()->getAttribute('empty_value');
     }
 
 }
