@@ -52,7 +52,7 @@ class DateRangeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        if (!isset($options['default'])){
+        if (!isset($options['default'])) {
             if ($options['required']){
                 $dateRange = new DateRange($this->date_format);
                 $dateRange->createToDate(new \DateTime, $this->default_interval);
@@ -60,15 +60,13 @@ class DateRangeType extends AbstractType
                 $dateRange = null;
             }
 
-        }
-        else {
+        } else {
             $dateRange = $options['default'];
         }
 
         $options['default'] = $dateRange;
 
-
-        $builder->appendClientTransformer(new DateRangeToValueTransformer(
+        $builder->addViewTransformer(new DateRangeToValueTransformer(
             $this->date_format
         ));
 
@@ -85,8 +83,7 @@ class DateRangeType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('datepicker_date_format', $form->getAttribute('datepicker_date_format'));
-        $view->set('locale', $this->container->get('request')->getLocale());
-
+        $view->vars['datepicker_date_format'] = $form->getConfig()->getAttribute('datepicker_date_format');
+        $view->vars['locale'] = $this->container->get('request')->getLocale();
     }
 }
