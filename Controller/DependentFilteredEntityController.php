@@ -16,7 +16,7 @@ class DependentFilteredEntityController extends Controller
     public function getOptionsAction()
     {
 
-        $em = $this->get('doctrine')->getEntityManager();
+        $em = $this->get('doctrine')->getManager();
         $request = $this->getRequest();
         $translator = $this->get('translator');
 
@@ -40,12 +40,12 @@ class DependentFilteredEntityController extends Controller
 
 
         if (null !== $entity_inf['callback']) {
-            $repository = $qb->getEntityManager()->getRepository($entity_inf['class']);
-            
+            $repository = $qb->getManager()->getRepository($entity_inf['class']);
+
             if (!method_exists($repository, $entity_inf['callback'])) {
                 throw new \InvalidArgumentException(sprintf('Callback function "%s" in Repository "%s" does not exist.', $entity_inf['callback'], get_class($repository)));
             }
-            
+
             $repository->$entity_inf['callback']($qb);
         }
 

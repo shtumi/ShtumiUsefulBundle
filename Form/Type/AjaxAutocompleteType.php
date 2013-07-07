@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AjaxAutocompleteType extends AbstractType
 {
-
     private $container;
 
     public function __construct($container)
@@ -43,7 +42,6 @@ class AjaxAutocompleteType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $entities = $this->container->getParameter('shtumi.autocomplete_entities');
 
         if (null === $options['entity_alias']) {
@@ -58,18 +56,18 @@ class AjaxAutocompleteType extends AbstractType
         $options['property'] = $entities[$options['entity_alias']]['property'];
 
 
-        $builder->prependClientTransformer(new EntityToPropertyTransformer(
-            $this->container->get('doctrine')->getEntityManager(),
+        $builder->addViewTransformer(new EntityToPropertyTransformer(
+            $this->container->get('doctrine')->getManager(),
             $options['class'],
             $options['property']
-        ));
+        ), true);
 
         $builder->setAttribute('entity_alias', $options['entity_alias']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('entity_alias',  $form->getAttribute('entity_alias'));
+        $view->vars['entity_alias'] = $form->getConfig()->getAttribute('entity_alias');
     }
 
 }

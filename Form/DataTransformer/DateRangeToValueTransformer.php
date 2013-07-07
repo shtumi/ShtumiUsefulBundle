@@ -10,7 +10,6 @@ use Shtumi\UsefulBundle\Model\DateRange;
 
 class DateRangeToValueTransformer implements DataTransformerInterface
 {
-
     private $date_format;
     private $daterange_separator;
 
@@ -40,13 +39,11 @@ class DateRangeToValueTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
-
         if ('' === $value || null === $value) {
             return null;
         }
 
-        if (!is_string($value))
-        {
+        if (!is_string($value)) {
             return null;
         }
 
@@ -54,6 +51,5 @@ class DateRangeToValueTransformer implements DataTransformerInterface
         $dateRange->parseData($value);
 
         return $dateRange;
-
     }
 }

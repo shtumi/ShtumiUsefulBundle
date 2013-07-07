@@ -45,8 +45,7 @@ class EntityToIdTransformer implements DataTransformerInterface
             return null;
         }
 
-        if (!is_numeric($id))
-        {
+        if (!is_numeric($id)) {
             throw new UnexpectedTypeException($id, 'numeric' . $id);
         }
 

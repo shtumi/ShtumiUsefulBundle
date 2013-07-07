@@ -10,7 +10,7 @@
     <script>
         jQuery(function() {
 
-            jQuery( "#{{ form.getVars().id }}"  ).autocomplete({
+            jQuery( "#{{ form.vars.id }}"  ).autocomplete({
                 source: function( request, response ) {
                     jQuery.ajax({
                         url: "{{ path('shtumi_ajaxautocomplete') }}",
@@ -73,7 +73,7 @@
     <script type="text/javascript">
         jQuery(function(){
 
-            jQuery("select#{{ form.parent.getChild( parent_field ).getVars().id }}").change( function() {
+            jQuery("select#{{ form.parent.getChild( parent_field ).vars.id }}").change( function() {
                 var selected_index = {{ value ? value : 0 }};
                 jQuery("#loader").show();
                 jQuery.ajax({
@@ -86,15 +86,15 @@
                     url:"{{ path('shtumi_dependent_filtered_entity') }}",
                     success: function(msg){
                         if (msg != ''){
-                            jQuery("select#{{ form.getVars().id }}").html(msg).show();
-                            jQuery.each(jQuery("select#{{ form.getVars().id }} option"), function (index, option){
+                            jQuery("select#{{ form.vars.id }}").html(msg).show();
+                            jQuery.each(jQuery("select#{{ form.vars.id }} option"), function (index, option){
                                 if (jQuery(option).val() == selected_index)
                                     jQuery(option).prop('selected', true);
                             })
-                            jQuery("select#{{ form.getVars().id }}").trigger('change');
+                            jQuery("select#{{ form.vars.id }}").trigger('change');
                             jQuery("#loader").hide();
                         } else {
-                            jQuery("select#{{ form.getVars().id }}").html('<em>{{ no_result_msg|trans() }}</em>');
+                            jQuery("select#{{ form.vars.id }}").html('<em>{{ no_result_msg|trans() }}</em>');
                             jQuery("#loader").hide();
                         }
                     },
@@ -103,7 +103,7 @@
                     }
                 });
             });
-            jQuery("select#{{ form.parent.getChild( parent_field ).getVars().id }}").trigger('change');
+            jQuery("select#{{ form.parent.getChild( parent_field ).vars.id }}").trigger('change');
         });
     </script>
 
@@ -120,7 +120,7 @@
     <input {{ block('widget_attributes') }} value="{{ value }}" class="shtumi-daterange">
 
     <script>
-        jQuery('input#{{ form.getVars().id }}').datepick({
+        jQuery('input#{{ form.vars.id }}').datepick({
             rangeSelect: true, monthsToShow: 2, showTrigger: '#calImg', dateFormat: '{{ datepicker_date_format }}' });
     </script>
 

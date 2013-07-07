@@ -50,10 +50,6 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             return null;
         }
 
-        $em = $this->em;
-        $class = $this->class;
-        $repository = $em->getRepository($class);
-
         $entity = $this->em->getRepository($this->class)->findOneBy(array($this->property => $prop_value));
 
         return $entity;
