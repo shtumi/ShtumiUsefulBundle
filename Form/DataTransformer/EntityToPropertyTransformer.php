@@ -4,7 +4,7 @@ namespace Shtumi\UsefulBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\FormException;
@@ -36,8 +36,9 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
 
         if ($this->property) {
-            $propertyPath = new PropertyPath($this->property);
-            return $propertyPath->getValue($entity);
+            $propertyAccessor = PropertyAccess::getPropertyAccessor();
+            
+            return $propertyAccessor->getValue($entity, $this->property);
         }
 
         return current($this->unitOfWork->getEntityIdentifier($entity));
