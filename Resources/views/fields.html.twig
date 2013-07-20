@@ -73,7 +73,7 @@
     <script type="text/javascript">
         jQuery(function(){
 
-            jQuery("select#{{ form.parent.getChild( parent_field ).vars.id }}").change( function() {
+            jQuery("select#{{ form.parent.offsetGet( parent_field ).vars.id }}").change( function() {
                 var selected_index = {{ value ? value : 0 }};
                 jQuery("#loader").show();
                 jQuery.ajax({
@@ -103,7 +103,7 @@
                     }
                 });
             });
-            jQuery("select#{{ form.parent.getChild( parent_field ).vars.id }}").trigger('change');
+            jQuery("select#{{ form.parent.offsetGet( parent_field ).vars.id }}").trigger('change');
         });
     </script>
 
