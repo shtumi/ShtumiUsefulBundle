@@ -31,7 +31,7 @@ class DependentFilteredEntityType extends AbstractType
 
     public function getParent()
     {
-        return 'field';
+        return 'form';
     }
 
     public function getName()
@@ -49,7 +49,7 @@ class DependentFilteredEntityType extends AbstractType
         $options['no_result_msg'] = $entities[$options['entity_alias']]['no_result_msg'];
 
         $builder->addViewTransformer(new EntityToIdTransformer(
-            $this->container->get('doctrine')->getEntityManager(),
+            $this->container->get('doctrine')->getManager(),
             $options['class']
         ), true);
 
