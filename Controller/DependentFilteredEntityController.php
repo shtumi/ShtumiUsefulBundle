@@ -40,7 +40,7 @@ class DependentFilteredEntityController extends Controller
 
 
         if (null !== $entity_inf['callback']) {
-            $repository = $qb->getManager()->getRepository($entity_inf['class']);
+            $repository = $qb->getEntityManager()->getRepository($entity_inf['class']);
 
             if (!method_exists($repository, $entity_inf['callback'])) {
                 throw new \InvalidArgumentException(sprintf('Callback function "%s" in Repository "%s" does not exist.', $entity_inf['callback'], get_class($repository)));
