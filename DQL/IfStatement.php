@@ -23,9 +23,9 @@ class IfStatement extends FunctionNode
         $parser->match(Lexer::T_OPEN_PARENTHESIS); // (3)
         $this->f1 = $parser->SimpleConditionalExpression(); // (4)
         $parser->match(Lexer::T_COMMA); // (5)
-        $this->f2 = $parser->ArithmeticPrimary(); // (6)
+        $this->f2 = $parser->SimpleArithmeticExpression(); // (6)
         $parser->match(Lexer::T_COMMA); // (5)
-        $this->f3 = $parser->ArithmeticPrimary(); // (6)
+        $this->f3 = $parser->SimpleArithmeticExpression(); // (6)
         $parser->match(Lexer::T_CLOSE_PARENTHESIS); // (3)
     }
 
