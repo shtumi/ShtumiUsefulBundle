@@ -34,10 +34,17 @@ class DependentFilteredEntityController extends Controller
         $qb = $this->getDoctrine()
                 ->getRepository($entity_inf['class'])
                 ->createQueryBuilder('e')
-                ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
                 ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
                 ->setParameter('parent_id', $parent_id);
 
+        if ($entity_inf['many_to_many']) {
+            $qb
+                ->join('e.' . $entity_inf['parent_property'], $entity_inf['parent_property'])
+                ->where($entity_inf['parent_property'].'.id' . ' IN (:parent_id)')
+            ;
+        } else {
+            $qb->where('e.' . $entity_inf['parent_property'] . ' = :parent_id');
+        }
 
         if (null !== $entity_inf['callback']) {
             $repository = $qb->getEntityManager()->getRepository($entity_inf['class']);
