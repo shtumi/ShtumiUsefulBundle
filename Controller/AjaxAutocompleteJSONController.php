@@ -24,8 +24,10 @@ class AjaxAutocompleteJSONController extends Controller
         $entity_alias = $request->get('entity_alias');
         $entity_inf = $entities[$entity_alias];
 
-        if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
-            throw new AccessDeniedException();
+        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
+            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+                throw new AccessDeniedException();
+            }
         }
 
         $letters = $request->get('letters');

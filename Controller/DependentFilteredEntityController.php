@@ -27,8 +27,10 @@ class DependentFilteredEntityController extends Controller
         $entities = $this->get('service_container')->getParameter('shtumi.dependent_filtered_entities');
         $entity_inf = $entities[$entity_alias];
 
-        if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
-            throw new AccessDeniedException();
+        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
+            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+                throw new AccessDeniedException();
+            }
         }
 
         $qb = $this->getDoctrine()
@@ -72,6 +74,64 @@ class DependentFilteredEntityController extends Controller
 
         return new Response($html);
 
+    }
+
+
+    public function getJSONAction()
+    {
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $this->get('doctrine.orm.entity_manager');
+        $request = $this->get('request');
+
+        $entity_alias = $request->get('entity_alias');
+        $parent_id    = $request->get('parent_id');
+        $empty_value  = $request->get('empty_value');
+
+        $entities = $this->get('service_container')->getParameter('shtumi.dependent_filtered_entities');
+        $entity_inf = $entities[$entity_alias];
+
+        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
+            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+                throw new AccessDeniedException();
+            }
+        }
+
+        $term = $request->get('term');
+        $maxRows = $request->get('maxRows', 20);
+
+        $like = '%' . $term . '%';
+
+        $property = $entity_inf['property'];
+        if (!$entity_inf['property_complicated']) {
+            $property = 'e.' . $property;
+        }
+
+        $qb = $em->createQueryBuilder()
+            ->select('e')
+            ->from($entity_inf['class'], 'e')
+            ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
+            ->setParameter('parent_id', $parent_id)
+            ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
+            ->setParameter('like', $like )
+            ->setMaxResults($maxRows);
+
+        if ($entity_inf['case_insensitive']) {
+            $qb->andWhere('LOWER(' . $property . ') LIKE LOWER(:like)');
+        } else {
+            $qb->andWhere($property . ' LIKE :like');
+        }
+
+        $results = $qb->getQuery()->getResult();
+
+        $res = array();
+        foreach ($results AS $r){
+            $res[] = array(
+                'id' => $r->getId(),
+                'text' => (string)$r
+            );
+        }
+
+        return new Response(json_encode($res));
     }
 
     private function getGetterName($property)

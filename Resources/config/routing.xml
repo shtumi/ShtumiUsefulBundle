@@ -8,8 +8,16 @@
         <default key="_controller">ShtumiUsefulBundle:AjaxAutocompleteJSON:getJSON</default>
     </route>
 
+    <route id="shtumi_ajaxfileupload" pattern="/shtumi_ajaxfileupload">
+        <default key="_controller">ShtumiUsefulBundle:AjaxFile:upload</default>
+    </route>
+
     <route id="shtumi_dependent_filtered_entity" pattern="/shtumi_dependent_filtered_entity">
         <default key="_controller">%shtumi_dependent_filtered_entity_controller_route%</default>
+    </route>
+
+    <route id="shtumi_dependent_filtered_select2" pattern="/shtumi_dependent_filtered_select2">
+        <default key="_controller">ShtumiUsefulBundle:DependentFilteredEntity:getJson</default>
     </route>
 
 </routes>

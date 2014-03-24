@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of DateRangeType
+ * Description of AjaxFileType
  *
  * @author shtumi
  */
@@ -13,29 +13,18 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\Extension\Core\DataTransformer\ValueToStringTransformer;
-use Shtumi\UsefulBundle\Form\DataTransformer\DateRangeToValueTransformer;
+use Shtumi\UsefulBundle\Form\DataTransformer\AjaxFileTransformer;
 
 use Shtumi\UsefulBundle\Model\DateRange;
 
-class DateRangeType extends AbstractType
+class AjaxFileType extends AbstractType
 {
-    private $date_format;
-    private $default_interval;
-    private $container;
-
-    public function __construct($container, $parameters)
-    {
-        $this->date_format      = $parameters['date_format'];
-        $this->default_interval = $parameters['default_interval'];
-        $this->container        = $container;
-    }
-
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'default' => null,
             'compound' => false,
+            'multiple' => false
         ));
     }
 
@@ -46,12 +35,17 @@ class DateRangeType extends AbstractType
 
     public function getName()
     {
-        return 'shtumi_daterange';
+        return 'shtumi_ajaxfile';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addViewTransformer(new AjaxFileTransformer(
+            $this->date_format
+        ));
+    }
 
+/*
         if (!isset($options['default'])) {
             if ($options['required']){
                 $dateRange = new DateRange($this->date_format);
@@ -66,9 +60,6 @@ class DateRangeType extends AbstractType
 
         $options['default'] = $dateRange;
 
-        $builder->addViewTransformer(new DateRangeToValueTransformer(
-            $this->date_format
-        ));
 
         $builder->setData($options['default']);
 
@@ -86,4 +77,5 @@ class DateRangeType extends AbstractType
         $view->vars['datepicker_date_format'] = $form->getConfig()->getAttribute('datepicker_date_format');
         $view->vars['locale'] = $this->container->get('request')->getLocale();
     }
+*/
 }

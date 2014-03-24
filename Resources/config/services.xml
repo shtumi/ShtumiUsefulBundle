@@ -20,6 +20,16 @@
             <argument type="service" id="service_container"/>
         </service>
 
+        <service id="shtumi.useful.type.dependent_filtered_select2" class="Shtumi\UsefulBundle\Form\Type\DependentFilteredSelect2Type">
+            <tag name="form.type" alias="shtumi_dependent_filtered_select2"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="shtumi.useful.type.ajax_file" class="Shtumi\UsefulBundle\Form\Type\AjaxFileType">
+            <tag name="form.type" alias="shtumi_ajaxfile"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
         <service id="shtumi.useful.type.daterange" class="Shtumi\UsefulBundle\Form\Type\DateRangeType">
             <tag name="form.type" alias="shtumi_daterange" />
             <argument type="service" id="service_container" />
