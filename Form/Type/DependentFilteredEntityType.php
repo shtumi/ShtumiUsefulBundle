@@ -4,7 +4,7 @@ namespace Shtumi\UsefulBundle\Form\Type;
 
 use Shtumi\UsefulBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
@@ -28,7 +28,7 @@ class DependentFilteredEntityType extends AbstractType
         );
     }
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'field';
     }
@@ -38,7 +38,7 @@ class DependentFilteredEntityType extends AbstractType
         return 'dependent_filtered_entity';
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $entities = $this->container->getParameter('shtumi.dependent_filtered_entities');
@@ -61,7 +61,7 @@ class DependentFilteredEntityType extends AbstractType
 
     }
 
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->set('parent_field', $form->getAttribute('parent_field'));
         $view->set('entity_alias', $form->getAttribute('entity_alias'));
