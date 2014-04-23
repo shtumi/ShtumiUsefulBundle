@@ -34,7 +34,7 @@ class AjaxAutocompleteType extends AbstractType
         return 'type_ajax_autocomplete';
     }
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'text';
     }
