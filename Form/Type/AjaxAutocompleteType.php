@@ -2,11 +2,11 @@
 
 namespace Shtumi\UsefulBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Exception\FormException;
+use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Shtumi\UsefulBundle\Form\DataTransformer\EntityToPropertyTransformer;
 use Symfony\Component\Form\AbstractType;
 
@@ -31,25 +31,25 @@ class AjaxAutocompleteType extends AbstractType
 
     public function getName()
     {
-        return 'type_ajax_autocomplete';
+        return 'shtumi_ajax_autocomplete';
     }
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'text';
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $entities = $this->container->getParameter('shtumi.autocomplete_entities');
 
         if (null === $options['entity_alias']) {
-            throw new FormException('You must provide a entity alias "entity_alias" and tune it in config file');
+            throw new InvalidConfigurationException('You must provide a entity alias "entity_alias" and tune it in config file');
         }
 
         if (!isset ($entities[$options['entity_alias']])){
-            throw new FormException('There are no entity alias "' . $options['entity_alias'] . '" in your config file');
+            throw new InvalidConfigurationException('There are no entity alias "' . $options['entity_alias'] . '" in your config file');
         }
 
         $options['class'] = $entities[$options['entity_alias']]['class'];
@@ -70,7 +70,7 @@ class AjaxAutocompleteType extends AbstractType
         }
     }
 
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->set('entity_alias',  $form->getAttribute('entity_alias'));
         $view->set('auto_focus',  $form->getAttribute('auto_focus'));
