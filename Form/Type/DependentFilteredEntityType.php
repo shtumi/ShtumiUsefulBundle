@@ -35,7 +35,7 @@ class DependentFilteredEntityType extends AbstractType
 
     public function getName()
     {
-        return 'dependent_filtered_entity';
+        return 'shtumi_dependent_filtered_entity';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
