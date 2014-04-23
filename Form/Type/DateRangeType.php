@@ -45,7 +45,7 @@ class DateRangeType extends AbstractType
 
     public function getName()
     {
-        return 'daterange';
+        return 'shtumi_daterange';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
