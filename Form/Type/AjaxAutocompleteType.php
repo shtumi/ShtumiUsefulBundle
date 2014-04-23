@@ -31,7 +31,7 @@ class AjaxAutocompleteType extends AbstractType
 
     public function getName()
     {
-        return 'type_ajax_autocomplete';
+        return 'shtumi_type_ajax_autocomplete';
     }
 
     public function getParent()
