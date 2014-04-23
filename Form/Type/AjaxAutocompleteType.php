@@ -70,7 +70,7 @@ class AjaxAutocompleteType extends AbstractType
         }
     }
 
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->set('entity_alias',  $form->getAttribute('entity_alias'));
         $view->set('auto_focus',  $form->getAttribute('auto_focus'));
