@@ -48,7 +48,15 @@ class EntityToIdTransformer implements DataTransformerInterface
             throw new UnexpectedTypeException($id, 'numeric' . $id);
         }
 
-        $entity = $this->em->getRepository($this->class)->findOneById($id);
+        $pkColumn = $this->em
+                         ->getClassMetadata($this->class)
+                         ->getSingleIdentifierColumnName();
+
+        $pkFieldName = $this->em
+                             ->getClassMetadata($this->class)
+                             ->getFieldForColumn($pkColumn);
+
+        $entity = $this->em->getRepository($this->class)->findOneBy(array($pkFieldName => $id));
 
         if ($entity === null) {
             throw new TransformationFailedException(sprintf('The entity with key "%s" could not be found', $id));
