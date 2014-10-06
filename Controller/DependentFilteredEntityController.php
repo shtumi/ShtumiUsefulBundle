@@ -58,7 +58,17 @@ class DependentFilteredEntityController extends Controller
         $results = $qb->getQuery()->getResult();
 
         if (empty($results)) {
-            return new Response('<option value="">' . $translator->trans($entity_inf['no_result_msg']) . '</option>');
+            // Executes fallback query to get all results
+            $qb = $this->getDoctrine()
+                       ->getRepository($entity_inf['class'])
+                       ->createQueryBuilder('e');
+
+            if (null !== $entity_inf['callback']) {
+                $repository = $qb->getEntityManager()->getRepository($entity_inf['class']);
+                $repository->$entity_inf['callback']($qb);
+            }
+
+            $results = $qb->getQuery()->getResult();
         }
 
         $html = '';
