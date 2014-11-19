@@ -15,6 +15,11 @@
             <argument type="service" id="service_container"/>
         </service>
 
+        <service id="shtumi.useful.type.select2_entity" class="Shtumi\UsefulBundle\Form\Type\Select2EntityType">
+            <tag name="form.type" alias="shtumi_select2_entity" />
+            <argument type="service" id="service_container"/>
+        </service>
+
         <service id="shtumi.useful.type.dependent_filtered_entity" class="Shtumi\UsefulBundle\Form\Type\DependentFilteredEntityType">
             <tag name="form.type" alias="shtumi_dependent_filtered_entity"/>
             <argument type="service" id="service_container"/>
