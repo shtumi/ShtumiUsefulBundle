@@ -2,13 +2,11 @@
 
 namespace Shtumi\UsefulBundle\Form\Type;
 
-use Shtumi\UsefulBundle\Form\DataTransformer\EntityToIdTransformer;
+use Shtumi\UsefulBundle\Form\DataTransformer\EntityToSelect2ValueTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Exception\FormException;
-use Shtumi\UsefulBundle\Form\DataTransformer\EntityToPropertyTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -57,7 +55,7 @@ class Select2EntityType extends AbstractType
         $options['property'] = $entities[$options['entity_alias']]['property'];
 
 
-        $builder->addViewTransformer(new EntityToIdTransformer(
+        $builder->addViewTransformer(new EntityToSelect2ValueTransformer(
             $this->container->get('doctrine')->getManager(),
             $options['class']
         ), true);
