@@ -100,13 +100,14 @@
 
     <select {{ block('widget_attributes') }}></select>
 
-    <img src='{{ asset('bundles/shtumiuseful/images/ajax-loader.gif' ) }}' id='loader' style='display: none;'>
+    <img src='{{ asset('bundles/shtumiuseful/images/ajax-loader.gif' ) }}' class='loader' style='display: none;'>
     <script type="text/javascript">
         jQuery(function(){
 
             jQuery("select#{{ form.parent.offsetGet( parent_field ).vars.id }}").change( function() {
                 var selected_index = {{ value ? value : 0 }};
-                jQuery("#loader").show();
+                var loader = jQuery("select#{{ form.vars.id }}").siblings('.loader');
+                loader.show();
                 jQuery.ajax({
                     type: "POST",
                     data: {
