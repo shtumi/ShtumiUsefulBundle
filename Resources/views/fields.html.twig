@@ -124,10 +124,10 @@
                                     jQuery(option).prop('selected', true);
                             })
                             jQuery("select#{{ form.vars.id }}").trigger('change');
-                            jQuery("#loader").hide();
+                            loader.hide();
                         } else {
                             jQuery("select#{{ form.vars.id }}").html('<em>{{ no_result_msg|trans() }}</em>');
-                            jQuery("#loader").hide();
+                            loader.hide();
                         }
                     },
                     error: function(xhr, ajaxOptions, thrownError){
