@@ -28,7 +28,7 @@ class DependentFilteredEntityController extends Controller
         $entity_inf = $entities[$entity_alias];
 
         if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
-            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+            if (false === $this->get('security.authorization_checker')->isGranted( $entity_inf['role'] )) {
                 throw new AccessDeniedException();
             }
         }
@@ -91,7 +91,7 @@ class DependentFilteredEntityController extends Controller
         $entity_inf = $entities[$entity_alias];
 
         if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
-            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+            if (false === $this->get('security.authorization_checker')->isGranted( $entity_inf['role'] )) {
                 throw new AccessDeniedException();
             }
         }
@@ -145,5 +145,10 @@ class DependentFilteredEntityController extends Controller
 
         return $name;
 
+    }
+
+    private function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
     }
 }
