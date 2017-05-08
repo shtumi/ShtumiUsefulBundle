@@ -51,7 +51,7 @@ class AjaxFileType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'shtumi_ajaxfile_widget';
+        return 'shtumi_ajaxfile';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -47,7 +47,7 @@ class Select2EntityType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'shtumi_select2_entity_widget';
+        return 'shtumi_select2_entity';
     }
 
     public function getParent()

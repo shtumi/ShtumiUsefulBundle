@@ -49,7 +49,7 @@ class AjaxAutocompleteType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'shtumi_ajax_autocomplete_widget';
+        return 'shtumi_ajax_autocomplete';
     }
 
     public function getParent()

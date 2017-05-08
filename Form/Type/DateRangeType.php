@@ -61,7 +61,7 @@ class DateRangeType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'shtumi_daterange_widget';
+        return 'shtumi_daterange';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -54,7 +54,7 @@ class DependentFilteredSelect2Type extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'shtumi_dependent_filtered_select2_widget';
+        return 'shtumi_dependent_filtered_select2';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -53,7 +53,7 @@ class DependentFilteredEntityType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'shtumi_dependent_filtered_entity_widget';
+        return 'shtumi_dependent_filtered_entity';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
