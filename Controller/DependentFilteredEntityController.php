@@ -48,7 +48,7 @@ class DependentFilteredEntityController extends Controller
                 throw new \InvalidArgumentException(sprintf('Callback function "%s" in Repository "%s" does not exist.', $entity_inf['callback'], get_class($repository)));
             }
 
-            $repository->$entity_inf['callback']($qb);
+            call_user_func(array($repository, $entity_inf['callback']), $qb);
         }
 
         $results = $qb->getQuery()->getResult();

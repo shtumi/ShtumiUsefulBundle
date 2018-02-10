@@ -1,5 +1,5 @@
 {
-    "name": "shtumi/useful-bundle",
+    "name": "avalia/shtumi-useful-bundle",
     "type": "symfony-bundle",
     "description": "Symfony ShtumiUsefulBundle",
     "keywords": ["Ajax Autocomplete form type", "Dependent filtered form type", "daterange", "shtumi"],
@@ -8,6 +8,10 @@
         {
             "name": "Mikhail Shtukin",
             "email": "shtumi@tut.by"
+        },
+        {
+            "name": "Alessandro Friscia",
+            "email": "alessandro@avalia.it"
         }
     ],
     "require": {
@@ -18,7 +22,7 @@
         "sonata-project/doctrine-orm-admin-bundle": "master-dev"
     },
     "autoload": {
-        "psr-0": { "Shtumi\\UsefulBundle": "" }
+        "psr-0": { "Shtumi\\UsefulBundle": "Avalia/" }
     },
-    "target-dir": "Shtumi/UsefulBundle"
+    "target-dir": "Avalia/Shtumi/UsefulBundle"
 }
