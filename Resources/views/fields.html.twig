@@ -122,15 +122,17 @@
                                 if (jQuery(option).val() == selected_index)
                                     jQuery(option).prop('selected', true);
                             })
-                            jQuery("select#{{ form.vars.id }}").trigger('change');
                             jQuery("#loader").hide();
                         } else {
                             jQuery("select#{{ form.vars.id }}").html('<em>{{ no_result_msg|trans() }}</em>');
                             jQuery("#loader").hide();
                         }
+
+                        //in case we have dependent combos even when its empty we need to trigger
+                        jQuery("select#{{ form.vars.id }}").trigger('change');
                     },
                     error: function(xhr, ajaxOptions, thrownError){
-                    jQuery('html').html(xhr.responseText);
+                        jQuery('html').html(xhr.responseText);
                     }
                 });
             });
