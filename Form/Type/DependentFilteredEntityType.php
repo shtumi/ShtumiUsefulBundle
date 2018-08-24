@@ -27,6 +27,7 @@ class DependentFilteredEntityType extends AbstractType
             'empty_value'       => '',
             'entity_alias'      => null,
             'parent_field'      => null,
+            'multiple'          => true,
             'compound'          => false
         ));
     }
@@ -37,6 +38,7 @@ class DependentFilteredEntityType extends AbstractType
             'empty_value'       => '',
             'entity_alias'      => null,
             'parent_field'      => null,
+            'multiple'          => true,
             'compound'          => false
         ));
     }
@@ -83,6 +85,13 @@ class DependentFilteredEntityType extends AbstractType
         $view->vars['entity_alias'] = $form->getConfig()->getAttribute('entity_alias');
         $view->vars['no_result_msg'] = $form->getConfig()->getAttribute('no_result_msg');
         $view->vars['empty_value'] = $form->getConfig()->getAttribute('empty_value');
+
+        if ($options['multiple']) {
+            // Add "[]" to the name in case a select tag with multiple options is
+            // displayed. Otherwise only one of the selected options is sent in the
+            // POST request.
+            $view->vars['full_name'] .= '[]';
+        }
     }
 
 }
