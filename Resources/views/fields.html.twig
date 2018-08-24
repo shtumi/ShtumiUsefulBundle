@@ -105,7 +105,12 @@
         jQuery(function(){
 
             jQuery("select#{{ form.parent.offsetGet( parent_field ).vars.id }}").change( function() {
-                var selected_index = {{ value ? value : 0 }};
+                {% if value is iterable %}
+                    var selected_indexes = ['{{ value | join("', '")  | raw }}'];
+                {% else %}
+                    var selected_indexes = ['{{ value ? value : 0 }}'];
+                {% endif %}
+
                 jQuery("#loader").show();
                 jQuery.ajax({
                     type: "POST",
@@ -119,7 +124,7 @@
                         if (msg != ''){
                             jQuery("select#{{ form.vars.id }}").html(msg).show();
                             jQuery.each(jQuery("select#{{ form.vars.id }} option"), function (index, option){
-                                if (jQuery(option).val() == selected_index)
+                                if (selected_indexes.indexOf(jQuery(option).val()) > -1)
                                     jQuery(option).prop('selected', true);
                             })
                             jQuery("#loader").hide();
