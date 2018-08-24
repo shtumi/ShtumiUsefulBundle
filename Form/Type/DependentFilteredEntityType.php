@@ -38,7 +38,7 @@ class DependentFilteredEntityType extends AbstractType
             'empty_value'       => '',
             'entity_alias'      => null,
             'parent_field'      => null,
-            'multiple'          => true,
+            'multiple'          => false,
             'compound'          => false
         ));
     }
