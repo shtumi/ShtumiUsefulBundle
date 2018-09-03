@@ -33,12 +33,25 @@ class DependentFilteredEntityController extends Controller
             }
         }
 
+        $classMetaData = $em->getClassMetadata($entity_inf['class']);
+        $associationsMappings = $classMetaData->getAssociationMappings();
+
         $qb = $this->getDoctrine()
                 ->getRepository($entity_inf['class'])
-                ->createQueryBuilder('e')
-                ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
-                ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
-                ->setParameter('parent_id', $parent_id);
+                ->createQueryBuilder('e');
+
+        if(isset($associationsMappings[$entity_inf['parent_property']])){ // if association can have multiple we join and filter by target entity identifier
+            $qb->join('e.' . $entity_inf['parent_property'], 'r');
+
+            $targetClassMetaData = $em->getClassMetadata($associationsMappings[$entity_inf['parent_property']]['targetEntity']);
+
+            $qb->where('r.' . $targetClassMetaData->getIdentifierFieldNames()[0] . ' = :parent_id');
+        }else{
+            $qb->where('e.' . $entity_inf['parent_property'] . ' = :parent_id');
+        }
+
+        $qb->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
+            ->setParameter('parent_id', $parent_id);
 
 
         if (null !== $entity_inf['callback']) {
