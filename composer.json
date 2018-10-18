@@ -24,6 +24,5 @@
         "exclude-from-classmap": [
             "/Tests/"
         ]
-    },
-    "target-dir": "keyopstech/Shtumi/UsefulBundle"
+    }
 }
