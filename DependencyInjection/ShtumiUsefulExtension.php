@@ -25,7 +25,7 @@ class ShtumiUsefulExtension extends Extension
         $container->setParameter('shtumi.dependent_filtered_entities', $config['dependent_filtered_entities']);
 
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
 }
