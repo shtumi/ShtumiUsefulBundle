@@ -1,5 +1,5 @@
 {
-    "name": "keyops/shtumi-useful-bundle",
+    "name": "keyopstech/shtumi-useful-bundle",
     "type": "symfony-bundle",
     "description": "Symfony ShtumiUsefulBundle",
     "keywords": [ "Dependent filtered form type","shtuimi"],
@@ -24,5 +24,6 @@
         "exclude-from-classmap": [
             "/Tests/"
         ]
-    }
+    },
+    "target-dir": "keyopstech/Shtumi/UsefulBundle"
 }
