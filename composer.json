@@ -1,8 +1,8 @@
 {
-    "name": "avalia/shtumi-useful-bundle",
+    "name": "keyops/shtumi-useful-bundle",
     "type": "symfony-bundle",
     "description": "Symfony ShtumiUsefulBundle",
-    "keywords": ["Ajax Autocomplete form type", "Dependent filtered form type", "daterange", "shtumi"],
+    "keywords": [ "Dependent filtered form type","shtuimi"],
     "license": "MIT",
     "authors": [
         {
@@ -10,8 +10,8 @@
             "email": "shtumi@tut.by"
         },
         {
-            "name": "Alessandro Friscia",
-            "email": "alessandro@avalia.it"
+            "name": "Hao TAN",
+            "email": "ferdinandfly@hotmail.com"
         }
     ],
     "require": {
