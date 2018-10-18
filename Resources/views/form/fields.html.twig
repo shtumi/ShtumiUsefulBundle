@@ -1,0 +1,68 @@
+
+{% block dependent_filtered_entity_widget %}
+    {# filter forms of sonata are warrpaet by another form so we need to change the form widget id #}
+    {% set parentForm = form.parent %}
+    {% if parentForm.parent %} {# it's a filter field #}
+        {% set parentForm = parentForm.parent %}
+        {% set parentFieldId = parentForm.offsetGet( parent_field ).vars.id ~ '_value' %}
+    {% else %}
+        {% set parentFieldId = parentForm.offsetGet( parent_field ).vars.id %}
+    {% endif %}
+
+    <select {{ block('widget_attributes') }} ><option value="">{{ empty_value }}</option></select>
+
+    <img src='{{ asset('bundles/shtumiuseful/images/ajax-loader.gif' ) }}' id='loader' style='display: none;'>
+    <script type="text/javascript">
+        jQuery(function(){
+
+            jQuery("select#{{ parentFieldId }}").change( function() {
+                var selected_index = {{ value ? value : 0 }};
+                if(jQuery(this).val()){
+                    jQuery("#loader").show();
+                    jQuery.ajax({
+                        type: "POST",
+                        data: {
+                            parent_id: jQuery(this).val(),
+                            entity_alias: "{{ entity_alias }}",
+                            empty_value: "{{ empty_value }}"
+                        },
+                        url:"{{ path('shtumi_dependent_filtered_entity') }}",
+                        success: function(msg){
+                            if (msg != ''){
+                                jQuery("select#{{ form.vars.id }}").html(msg);
+                                //once the options are setted, we set all as selected
+                                jQuery.each(jQuery("select#{{ form.vars.id }} option"), function (index, option){
+                                    if (jQuery(option).val() == selected_index)
+                                        jQuery(option).prop('selected', true);
+                                })
+                                jQuery("select#{{ form.vars.id }}").trigger('change');
+                                jQuery("#loader").hide();
+                            } else {
+                                jQuery("select#{{ form.vars.id }}").html('<em>{{ no_result_msg|trans() }}</em>');
+                                jQuery("#loader").hide();
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            jQuery("select#{{ form.vars.id }}").html(xhr.responseText);
+                            jQuery.each(jQuery("select#{{ form.vars.id }} option"), function (index, option){
+                                if (jQuery(option).val() == selected_index)
+                                    jQuery(option).prop('selected', true);
+                            })
+                            jQuery("select#{{ form.vars.id }}").trigger('change');
+                            jQuery("#loader").hide();
+                        }
+                    });
+                }
+            });
+
+            jQuery('#{{ id }}').change(function(){
+                if(jQuery(this).val()){
+                    jQuery('#field_error_{{ id }}').hide();
+                }
+            });
+
+            jQuery("select#{{ parentFieldId }}").trigger('change');
+        });
+    </script>
+
+{% endblock %}
