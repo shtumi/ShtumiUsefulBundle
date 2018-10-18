@@ -1,0 +1,3 @@
+shtumi_dependent_filtered_entity:
+    path: '/admin/shtumi_dependent_filtered_entity'
+    controller: Shtumi\UsefulBundle\Controller\DependentFilteredEntityController::getOptions

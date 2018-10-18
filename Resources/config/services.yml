@@ -1,0 +1,6 @@
+services:
+    Shtumi\UsefulBundle\Form\Type\DependentFilteredEntityType:
+        tags: [form.type]
+        alias: shtumi_dependent_filtered_entity
+        arguments:
+            - "@service_container"
