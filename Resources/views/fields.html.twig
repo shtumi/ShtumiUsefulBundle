@@ -1,317 +1,68 @@
-{% block shtumi_select2_entity_widget %}
-
-    <script>
-        jQuery(function() {
-            jQuery("#{{ form.vars.id }}").select2({
-                minimumInputLength: 0,
-                ajax: {
-                    url: '{{ path('shtumi_select2_entity') }}',
-                    dataType: 'json',
-                    data: function (term, page) {
-                        return {
-                            entity_alias: "{{ entity_alias }}",
-                            term: term,
-                            maxRows: 20,
-                            page: page
-                        };
-                    },
-                    results: function (data, page) {
-                        return {results: data};
-                    }
-                }
-            });
-            jQuery("#{{ form.vars.id }}").select2('data', {{ value|raw }});
-        });
-    </script>
-
-    {{ form_widget(form) }}
-
-{% endblock %}
-
-{% block shtumi_ajax_autocomplete_widget %}
-
-    <script type="text/javascript">
-        if (typeof jQuery.ui == 'undefined'){
-            jQuery.getScript('{{ asset('/bundles/shtumiuseful/js/jqueryui/jquery-ui-1.10.1.custom.min.js') }}');
-        }
-
-    </script>
-
-    <script>
-        jQuery(function() {
-            jQuery("body").bind("DOMSubtreeModified", function() {
-                jQuery( "#{{ form.vars.id }}"  ).autocomplete({
-                    source: function( request, response ) {
-                        jQuery.ajax({
-                            url: "{{ path('shtumi_ajaxautocomplete') }}",
-                            dataType: "json",
-                            data: {
-                                maxRows: 12,
-                                letters: request.term,
-                                entity_alias: "{{ entity_alias }}"
-                            },
-                            success: function( data ) {
-                                response( jQuery.map( data, function( item ) {
-                                    return {
-                                        label: item,
-                                        value: item
-                                    }
-                                }));
-                            }
-                        });
-                    },
-                    minLength: 2,
-                    open: function() {
-                        jQuery( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-                    },
-                    close: function() {
-                        jQuery( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-                    }
-                });
-            });
-
-        });
-    </script>
-
-    <style>
-        .ui-autocomplete {
-            max-height: 100px;
-            overflow-y: auto;
-            /* prevent horizontal scrollbar */
-            overflow-x: hidden;
-            /* add padding to account for vertical scrollbar */
-            padding-right: 20px;
-        }
-        /* IE 6 doesn't support max-height
-         * we use height instead, but this forces the menu to always be this tall
-         */
-        * html .ui-autocomplete {
-            height: 100px;
-        }
-    </style>
-
-
-    {{ form_widget(form) }}
-
-{% endblock %}
-
 
 {% block shtumi_dependent_filtered_entity_widget %}
+    {# filter forms of sonata are warrpaet by another form so we need to change the form widget id #}
+    {% set parentForm = form.parent %}
+    {% if parentForm.parent %} {# it's a filter field #}
+        {% set parentForm = parentForm.parent %}
+        {% set parentFieldId = parentForm.offsetGet( parent_field ).vars.id ~ '_value' %}
+    {% else %}
+        {% set parentFieldId = parentForm.offsetGet( parent_field ).vars.id %}
+    {% endif %}
 
-    <select {{ block('widget_attributes') }}></select>
+    <select {{ block('widget_attributes') }} ><option value="">{{ empty_value }}</option></select>
 
     <img src='{{ asset('bundles/shtumiuseful/images/ajax-loader.gif' ) }}' id='loader' style='display: none;'>
     <script type="text/javascript">
         jQuery(function(){
 
-            jQuery("select#{{ form.parent.offsetGet( parent_field ).vars.id }}").change( function() {
+            jQuery("select#{{ parentFieldId }}").change( function() {
                 var selected_index = {{ value ? value : 0 }};
-                jQuery("#loader").show();
-                jQuery.ajax({
-                    type: "POST",
-                    data: {
-                        parent_id: jQuery(this).val(),
-                        entity_alias: "{{ entity_alias }}",
-                        empty_value: "{{ empty_value }}"
-                    },
-                    url:"{{ path('shtumi_dependent_filtered_entity') }}",
-                    success: function(msg){
-                        if (msg != ''){
-                            jQuery("select#{{ form.vars.id }}").html(msg).show();
+                if(jQuery(this).val()){
+                    jQuery("#loader").show();
+                    jQuery.ajax({
+                        type: "POST",
+                        data: {
+                            parent_id: jQuery(this).val(),
+                            entity_alias: "{{ entity_alias }}",
+                            empty_value: "{{ empty_value }}"
+                        },
+                        url:"{{ path('shtumi_dependent_filtered_entity') }}",
+                        success: function(msg){
+                            if (msg != ''){
+                                jQuery("select#{{ form.vars.id }}").html(msg);
+                                //once the options are setted, we set all as selected
+                                jQuery.each(jQuery("select#{{ form.vars.id }} option"), function (index, option){
+                                    if (jQuery(option).val() == selected_index)
+                                        jQuery(option).prop('selected', true);
+                                })
+                                jQuery("select#{{ form.vars.id }}").trigger('change');
+                                jQuery("#loader").hide();
+                            } else {
+                                jQuery("select#{{ form.vars.id }}").html('<em>{{ no_result_msg|trans() }}</em>');
+                                jQuery("#loader").hide();
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            jQuery("select#{{ form.vars.id }}").html(xhr.responseText);
                             jQuery.each(jQuery("select#{{ form.vars.id }} option"), function (index, option){
                                 if (jQuery(option).val() == selected_index)
                                     jQuery(option).prop('selected', true);
                             })
                             jQuery("select#{{ form.vars.id }}").trigger('change');
                             jQuery("#loader").hide();
-                        } else {
-                            jQuery("select#{{ form.vars.id }}").html('<em>{{ no_result_msg|trans() }}</em>');
-                            jQuery("#loader").hide();
                         }
-                    },
-                    error: function(xhr, ajaxOptions, thrownError){
-                    jQuery('html').html(xhr.responseText);
-                    }
-                });
-            });
-            jQuery("select#{{ form.parent.offsetGet( parent_field ).vars.id }}").trigger('change');
-        });
-    </script>
-
-{% endblock %}
-
-{% block shtumi_dependent_filtered_select2_widget %}
-
-    <input {{ block('widget_attributes') }} />
-
-    <script type="text/javascript">
-        jQuery(function(){
-
-            jQuery("#{{ form.vars.id }}").select2({
-                placeholder: "{{ empty_value }}",
-                minimumInputLength: 0,
-                ajax: {
-                    url: '{{ path('shtumi_dependent_filtered_select2') }}',
-                    dataType: 'json',
-                    data: function (term, page) {
-                        return {
-                            term: term,
-                            parent_id: jQuery("#{{ form.parent.offsetGet( parent_field ).vars.id }}").val(),
-                            entity_alias: "{{ entity_alias }}"
-                        };
-                    },
-                    results: function (data, page) {
-                        return {results: data};
-                    }
+                    });
                 }
             });
-            jQuery("#{{ form.vars.id }}").select2('data', {{ value|raw }});
 
-            jQuery("#{{ form.parent.offsetGet( parent_field ).vars.id }}").change(function(){
-                jQuery("#{{ form.vars.id }}").select2('data', null);
+            jQuery('#{{ id }}').change(function(){
+                if(jQuery(this).val()){
+                    jQuery('#field_error_{{ id }}').hide();
+                }
             });
+
+            jQuery("select#{{ parentFieldId }}").trigger('change');
         });
     </script>
 
 {% endblock %}
-
-
-{% block shtumi_daterange_widget %}
-
-    <style type="text/css">@import "{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.css') }}";</style>
-    <style type="text/css">@import "{{ asset('bundles/shtumiuseful/css/daterange.css') }}";</style>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/datepicker/jquery.datepick-' ~ locale[0:2] ~ '.js') }}"></script>
-
-    <input {{ block('widget_attributes') }} value="{{ value }}" class="shtumi-daterange">
-
-    <script>
-        jQuery('input#{{ form.vars.id }}').datepick({
-            rangeSelect: true, monthsToShow: 2, showTrigger: '#calImg', dateFormat: '{{ datepicker_date_format }}' });
-    </script>
-
-    <div style="display: none;">
-        <img id="calImg" src="{{ asset('bundles/shtumiuseful/js/datepicker/calendar-green.gif') }}" alt="Popup" class="trigger" height='22' align='absmiddle' style='margin-left: 10px;'>
-    </div>
-
-{% endblock %}
-
-
-{% block shtumi_ajaxfile_widget %}
-
-    <style type="text/css">@import "{{ asset('bundles/shtumiuseful/css/jquery-file-upload/jquery.fileupload.css') }}";</style>
-
-    <script type="text/javascript" src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-    <script type="text/javascript" src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/jquery-file-upload/jquery.iframe-transport.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/jquery-file-upload/jquery.fileupload.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/jquery-file-upload/jquery.fileupload-process.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/jquery-file-upload/jquery.fileupload-audio.js') }}"></script>
-
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/jquery-file-upload/jquery.fileupload-video.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/shtumiuseful/js/jquery-file-upload/jquery.fileupload-validate.js') }}"></script>
-
-
-    <!-- The fileinput-button span is used to style the file input field as button -->
-    <span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Add files...</span>
-        <!-- The file input field used as target for the file upload widget -->
-        {% set uploader_id = id ~ '_uploader'  %}
-        <input id="{{ uploader_id }}" name="{{ name }}" type="file" multiple>
-
-        <input {{ block('widget_attributes') }} type="hidden">
-
-    </span>
-
-
-    <div class="progress-bar progress-bar-success"></div>
-    <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
-
-    <script>
-
-        (function(){
-
-            var files_list = [];
-
-            jQuery('#{{ uploader_id }}')
-                .fileupload({
-                    url: '{{ path('shtumi_ajaxfileupload') }}',
-                    dataType: 'json',
-                    autoUpload: true,
-                    maxFileSize: 50000000000, // 5 MB
-                    // Enable image resizing, except for Android and Opera,
-                    // which actually support image resizing, but fail to
-                    // send Blob objects via XHR requests:
-                    disableImageResize: false,// /Android(?!.*Chrome)|Opera/
-                            //.test(window.navigator.userAgent),
-                    previewMaxWidth: 100,
-                    previewMaxHeight: 100,
-                    previewCrop: true
-                })
-                .on('fileuploadadd', function (e, data) {
-                    data.context = jQuery('<div/>').appendTo('#files');
-                    jQuery.each(data.files, function (index, file) {
-                        var node = jQuery('<p/>')
-                            .append(jQuery('<span/>').text(file.name));
-
-                        node.appendTo(data.context);
-                    });
-                })
-                .on('fileuploadprocessalways', function (e, data) {
-                    var index = data.index,
-                        file = data.files[index],
-                        node = jQuery(data.context.children()[index]);
-                    if (file.preview) {
-                        node
-                            .prepend('<br>')
-                            .prepend(file.preview);
-                    }
-                    if (file.error) {
-                        node
-                            .append('<br>')
-                            .append(jQuery('<span class="text-danger"/>').text(file.error));
-                    }
-                })
-                .on('fileuploadprogressall', function (e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    jQuery('#progress .progress-bar').css(
-                        'width',
-                        progress + '%'
-                    );
-                })
-                .on('fileuploaddone', function (e, data) {
-                    jQuery.each(data.result.files, function (index, file) {
-                        alert(123);
-                        if (file.url) {
-                            var link = jQuery('<a>')
-                                .attr('target', '_blank')
-                                .prop('href', file.url);
-                            jQuery(data.context.children()[index])
-                                .wrap(link);
-
-                            files_list.push(file.path);
-                            jQuery('#{{ id }}').val(JSON.stringify(files_list));
-                        } else if (file.error) {
-                            var error = jQuery('<span class="text-danger"/>').text(file.error);
-                            jQuery(data.context.children()[index])
-                                    .append('<br>')
-                                    .append(error);
-                        }
-                    });
-                })
-                .on('fileuploadfail', function (e, data) {
-                    jQuery.each(data.files, function (index, file) {
-                        var error = jQuery('<span class="text-danger"/>').text('File upload failed.');
-                        jQuery(data.context.children()[index])
-                                .append('<br>')
-                                .append(error);
-                    });
-                })
-                .prop('disabled', !jQuery.support.fileInput)
-                        .parent().addClass(jQuery.support.fileInput ? undefined : 'disabled');
-        }());
-    </script>
-
-{% endblock shtumi_ajaxfile_widget %}
