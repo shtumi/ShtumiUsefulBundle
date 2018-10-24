@@ -25,7 +25,8 @@ class DependentFilteredEntityType extends AbstractType
             'empty_value'       => '',
             'entity_alias'      => null,
             'parent_field'      => null,
-            'compound'          => false
+            'compound'          => false,
+            'translate_value' => false,
         ));
     }
 
@@ -47,6 +48,7 @@ class DependentFilteredEntityType extends AbstractType
         $builder->setAttribute("entity_alias", $options['entity_alias']);
         $builder->setAttribute("no_result_msg", $options['no_result_msg']);
         $builder->setAttribute("empty_value", $options['empty_value']);
+        $builder->setAttribute("translate_value", $options['translate_value']);
 
     }
 
@@ -56,6 +58,7 @@ class DependentFilteredEntityType extends AbstractType
         $view->vars['entity_alias'] = $form->getConfig()->getAttribute('entity_alias');
         $view->vars['no_result_msg'] = $form->getConfig()->getAttribute('no_result_msg');
         $view->vars['empty_value'] = $form->getConfig()->getAttribute('empty_value');
+        $view->vars['translate_value'] = $form->getConfig()->getAttribute('translate_value');
     }
 
 }
