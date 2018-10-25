@@ -1,0 +1,6 @@
+services:
+    Shtumi\UsefulBundle\Form\Type\DependentFilteredEntityType:
+        tags: [form.type]
+        public: true
+        arguments:
+            - "@service_container"

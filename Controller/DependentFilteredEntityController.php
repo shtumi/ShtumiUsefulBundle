@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -13,32 +14,31 @@ use Symfony\Component\HttpFoundation\Response;
 class DependentFilteredEntityController extends Controller
 {
 
-    public function getOptionsAction()
+    public function getOptionsAction(Request $request)
     {
 
-        $em = $this->get('doctrine')->getManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
         $translator = $this->get('translator');
 
         $entity_alias = $request->get('entity_alias');
-        $parent_id    = $request->get('parent_id');
-        $empty_value  = $request->get('empty_value');
-
+        $parent_id = $request->get('parent_id');
+        $empty_value = $request->get('empty_value');
+        $translateValue = $request->get('translate_value');
         $entities = $this->get('service_container')->getParameter('shtumi.dependent_filtered_entities');
         $entity_inf = $entities[$entity_alias];
 
-        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
-            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY') {
+            if (false === $this->get('security.context')->isGranted($entity_inf['role'])) {
                 throw new AccessDeniedException();
             }
         }
 
         $qb = $this->getDoctrine()
-                ->getRepository($entity_inf['class'])
-                ->createQueryBuilder('e')
-                ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
-                ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
-                ->setParameter('parent_id', $parent_id);
+            ->getRepository($entity_inf['class'])
+            ->createQueryBuilder('e')
+            ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
+            ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
+            ->setParameter('parent_id', $parent_id);
 
 
         if (null !== $entity_inf['callback']) {
@@ -61,15 +61,14 @@ class DependentFilteredEntityController extends Controller
         if ($empty_value !== false)
             $html .= '<option value="">' . $translator->trans($empty_value) . '</option>';
 
-        $getter =  $this->getGetterName($entity_inf['property']);
+        $getter = $this->getGetterName($entity_inf['property']);
 
-        foreach($results as $result)
-        {
+        foreach ($results as $result) {
             if ($entity_inf['property'])
                 $res = $result->$getter();
             else $res = (string)$result;
-
-            $html = $html . sprintf("<option value=\"%d\">%s</option>",$result->getId(), $res);
+            $res = $translateValue ? $res : $this->get('translator')->trans($res);
+            $html = $html . sprintf("<option value=\"%d\">%s</option>", $result->getId(), $res);
         }
 
         return new Response($html);
@@ -84,14 +83,14 @@ class DependentFilteredEntityController extends Controller
         $request = $this->get('request');
 
         $entity_alias = $request->get('entity_alias');
-        $parent_id    = $request->get('parent_id');
-        $empty_value  = $request->get('empty_value');
+        $parent_id = $request->get('parent_id');
+        $empty_value = $request->get('empty_value');
 
         $entities = $this->get('service_container')->getParameter('shtumi.dependent_filtered_entities');
         $entity_inf = $entities[$entity_alias];
 
-        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
-            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY') {
+            if (false === $this->get('security.context')->isGranted($entity_inf['role'])) {
                 throw new AccessDeniedException();
             }
         }
@@ -112,7 +111,7 @@ class DependentFilteredEntityController extends Controller
             ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
             ->setParameter('parent_id', $parent_id)
             ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
-            ->setParameter('like', $like )
+            ->setParameter('like', $like)
             ->setMaxResults($maxRows);
 
         if ($entity_inf['case_insensitive']) {
@@ -124,7 +123,7 @@ class DependentFilteredEntityController extends Controller
         $results = $qb->getQuery()->getResult();
 
         $res = array();
-        foreach ($results AS $r){
+        foreach ($results AS $r) {
             $res[] = array(
                 'id' => $r->getId(),
                 'text' => (string)$r
@@ -139,8 +138,8 @@ class DependentFilteredEntityController extends Controller
         $name = "get";
         $name .= mb_strtoupper($property[0]) . substr($property, 1);
 
-        while (($pos = strpos($name, '_')) !== false){
-            $name = substr($name, 0, $pos) . mb_strtoupper(substr($name, $pos+1, 1)) . substr($name, $pos+2);
+        while (($pos = strpos($name, '_')) !== false) {
+            $name = substr($name, 0, $pos) . mb_strtoupper(substr($name, $pos + 1, 1)) . substr($name, $pos + 2);
         }
 
         return $name;
