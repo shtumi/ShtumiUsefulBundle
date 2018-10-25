@@ -28,6 +28,7 @@ class DependentFilteredEntityType extends AbstractType
             'parent_field'      => null,
             'compound'          => false,
             'translate_value' => false,
+            'class' => '',
         ));
     }
 
@@ -60,10 +61,5 @@ class DependentFilteredEntityType extends AbstractType
         $view->vars['no_result_msg'] = $form->getConfig()->getAttribute('no_result_msg');
         $view->vars['empty_value'] = $form->getConfig()->getAttribute('empty_value');
         $view->vars['translate_value'] = $form->getConfig()->getAttribute('translate_value');
-    }
-
-    public function getParent()
-    {
-        return EntityType::class;
     }
 }
