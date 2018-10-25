@@ -3,6 +3,7 @@
 namespace Shtumi\UsefulBundle\Form\Type;
 
 use Shtumi\UsefulBundle\Form\DataTransformer\EntityToIdTransformer;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -61,4 +62,8 @@ class DependentFilteredEntityType extends AbstractType
         $view->vars['translate_value'] = $form->getConfig()->getAttribute('translate_value');
     }
 
+    public function getParent()
+    {
+        return EntityType::class;
+    }
 }
