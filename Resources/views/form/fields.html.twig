@@ -10,13 +10,8 @@
     {% endif %}
 
     <select {{ block('widget_attributes') }} >
-        <option value="">
-            {% if translate_value == true %}
-                {{ empty_value | trans }}
-            {% else %}
-                {{ empty_value }}
-            {% endif %}
-        </option></select>
+        <option value="">{{ empty_value | trans }}</option>
+    </select>
 
     <img src='{{ asset('bundles/shtumiuseful/images/ajax-loader.gif' ) }}' id='loader' style='display: none;'>
     <script type="text/javascript">
