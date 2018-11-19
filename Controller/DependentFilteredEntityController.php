@@ -33,25 +33,11 @@ class DependentFilteredEntityController extends Controller
             }
         }
 
-        $qb = $this->getDoctrine()
-            ->getRepository($entity_inf['class'])
-            ->createQueryBuilder('e')
-            ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
-            ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
-            ->setParameter('parent_id', $parent_id);
-
-
-        if (null !== $entity_inf['callback']) {
-            $repository = $qb->getEntityManager()->getRepository($entity_inf['class']);
-
-            if (!method_exists($repository, $entity_inf['callback'])) {
-                throw new \InvalidArgumentException(sprintf('Callback function "%s" in Repository "%s" does not exist.', $entity_inf['callback'], get_class($repository)));
-            }
-
-            call_user_func(array($repository, $entity_inf['callback']), $qb);
+        if (null !== $entity_inf['callback'] && preg_match('/^(.*)::([a-z]*)$/i', $entity_inf['callback'], $fcdnMatches) === 1) {
+            $results = $this->getResultsWithPersonnalizedCallback($fcdnMatches, $parent_id);
+        } else {
+            $results = $this->getResultsWithQueryBuilderAndPotentiallyRepositoryCallBack($entity_inf, $parent_id);
         }
-
-        $results = $qb->getQuery()->getResult();
 
         if (empty($results)) {
             return new Response('<option value="">' . $translator->trans($entity_inf['no_result_msg']) . '</option>');
@@ -72,6 +58,31 @@ class DependentFilteredEntityController extends Controller
         }
 
         return new Response($html);
+
+    }
+
+
+    private function getResultsWithQueryBuilderAndPotentiallyRepositoryCallBack($entity_inf, $parent_id)
+    {
+        $qb = $this->getDoctrine()
+            ->getRepository($entity_inf['class'])
+            ->createQueryBuilder('e')
+            ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
+            ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
+            ->setParameter('parent_id', $parent_id);
+
+
+        if (null !== $entity_inf['callback']) {
+            $repository = $qb->getEntityManager()->getRepository($entity_inf['class']);
+
+            if (!method_exists($repository, $entity_inf['callback'])) {
+                throw new \InvalidArgumentException(sprintf('Callback function "%s" in Repository "%s" does not exist.', $entity_inf['callback'], get_class($repository)));
+            }
+
+            call_user_func(array($repository, $entity_inf['callback']), $qb);
+        }
+
+        return $qb->getQuery()->getResult();
 
     }
 
@@ -144,5 +155,28 @@ class DependentFilteredEntityController extends Controller
 
         return $name;
 
+    }
+
+    /**
+     * @param $fcdnMatches
+     * @param $parent_id
+     * @return mixed
+     * @throws \Exception
+     */
+    private function getResultsWithPersonnalizedCallback($fcdnMatches, $parent_id)
+    {
+        if (!$this->has($fcdnMatches[1])) {
+            throw new \Exception(
+                sprintf('Controller %s must be a public service in container', $fcdnMatches[2])
+            );
+        }
+
+        if (!method_exists($this->get($fcdnMatches[1]), $fcdnMatches[2])) {
+            throw new \Exception(
+                sprintf('%s must be a valid public method with one parameter (parent_id)', $fcdnMatches[2])
+            );
+        }
+        $results = call_user_func(array($this->get($fcdnMatches[1]), $fcdnMatches[2]), $parent_id);
+        return $results;
     }
 }
