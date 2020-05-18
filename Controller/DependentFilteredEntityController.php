@@ -45,7 +45,11 @@ class DependentFilteredEntityController extends Controller
 
             $targetClassMetaData = $em->getClassMetadata($associationsMappings[$entity_inf['parent_property']]['targetEntity']);
 
-            $qb->where('r.' . $targetClassMetaData->getIdentifierFieldNames()[0] . ' = :parent_id');
+            if (is_array($parent_id)) {
+                $qb->where('r.' . $targetClassMetaData->getIdentifierFieldNames()[0] . ' IN (:parent_id)');
+            } else {
+                $qb->where('r.' . $targetClassMetaData->getIdentifierFieldNames()[0] . ' = :parent_id');
+            }
         }else{
             $qb->where('e.' . $entity_inf['parent_property'] . ' = :parent_id');
         }
