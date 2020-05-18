@@ -28,17 +28,34 @@ class DependentFilteredEntityController extends Controller
         $entity_inf = $entities[$entity_alias];
 
         if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
-            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+            if (false === $this->get('security.authorization_checker')->isGranted( $entity_inf['role'] )) {
                 throw new AccessDeniedException();
             }
         }
 
+        $classMetaData = $em->getClassMetadata($entity_inf['class']);
+        $associationsMappings = $classMetaData->getAssociationMappings();
+
         $qb = $this->getDoctrine()
                 ->getRepository($entity_inf['class'])
-                ->createQueryBuilder('e')
-                ->where('e.' . $entity_inf['parent_property'] . ' = :parent_id')
-                ->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
-                ->setParameter('parent_id', $parent_id);
+                ->createQueryBuilder('e');
+
+        if(isset($associationsMappings[$entity_inf['parent_property']])){ // if association can have multiple we join and filter by target entity identifier
+            $qb->join('e.' . $entity_inf['parent_property'], 'r');
+
+            $targetClassMetaData = $em->getClassMetadata($associationsMappings[$entity_inf['parent_property']]['targetEntity']);
+
+            if (is_array($parent_id)) {
+                $qb->where('r.' . $targetClassMetaData->getIdentifierFieldNames()[0] . ' IN (:parent_id)');
+            } else {
+                $qb->where('r.' . $targetClassMetaData->getIdentifierFieldNames()[0] . ' = :parent_id');
+            }
+        }else{
+            $qb->where('e.' . $entity_inf['parent_property'] . ' = :parent_id');
+        }
+
+        $qb->orderBy('e.' . $entity_inf['order_property'], $entity_inf['order_direction'])
+            ->setParameter('parent_id', $parent_id);
 
 
         if (null !== $entity_inf['callback']) {
@@ -61,7 +78,10 @@ class DependentFilteredEntityController extends Controller
         if ($empty_value !== false)
             $html .= '<option value="">' . $translator->trans($empty_value) . '</option>';
 
-        $getter =  $this->getGetterName($entity_inf['property']);
+
+        if ($entity_inf['property'] != null) {
+            $getter =  $this->getGetterName($entity_inf['property']);
+        }
 
         foreach($results as $result)
         {
@@ -91,7 +111,7 @@ class DependentFilteredEntityController extends Controller
         $entity_inf = $entities[$entity_alias];
 
         if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
-            if (false === $this->get('security.context')->isGranted( $entity_inf['role'] )) {
+            if (false === $this->get('security.authorization_checker')->isGranted( $entity_inf['role'] )) {
                 throw new AccessDeniedException();
             }
         }
@@ -145,5 +165,10 @@ class DependentFilteredEntityController extends Controller
 
         return $name;
 
+    }
+
+    private function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
     }
 }

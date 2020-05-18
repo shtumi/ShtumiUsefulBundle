@@ -4,9 +4,11 @@ namespace Shtumi\UsefulBundle\Form\Type;
 
 use Shtumi\UsefulBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DependentFilteredEntityType extends AbstractType
@@ -25,16 +27,33 @@ class DependentFilteredEntityType extends AbstractType
             'empty_value'       => '',
             'entity_alias'      => null,
             'parent_field'      => null,
+            'multiple'          => true,
+            'compound'          => false
+        ));
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'empty_value'       => '',
+            'entity_alias'      => null,
+            'parent_field'      => null,
+            'multiple'          => false,
             'compound'          => false
         ));
     }
 
     public function getParent()
     {
-        return 'form';
+        return FormType::class;
     }
 
     public function getName()
+    {
+        return 'shtumi_dependent_filtered_entity';
+    }
+
+    public function getBlockPrefix()
     {
         return 'shtumi_dependent_filtered_entity';
     }
@@ -66,6 +85,13 @@ class DependentFilteredEntityType extends AbstractType
         $view->vars['entity_alias'] = $form->getConfig()->getAttribute('entity_alias');
         $view->vars['no_result_msg'] = $form->getConfig()->getAttribute('no_result_msg');
         $view->vars['empty_value'] = $form->getConfig()->getAttribute('empty_value');
+
+        if ($options['multiple']) {
+            // Add "[]" to the name in case a select tag with multiple options is
+            // displayed. Otherwise only one of the selected options is sent in the
+            // POST request.
+            $view->vars['full_name'] .= '[]';
+        }
     }
 
 }

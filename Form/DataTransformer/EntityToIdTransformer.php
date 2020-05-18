@@ -28,14 +28,16 @@ class EntityToIdTransformer implements DataTransformerInterface
         if (null === $entity || '' === $entity) {
             return 'null';
         }
-        if (!is_object($entity)) {
+
+        if (!is_object($entity) && !is_array($entity)) {
             throw new UnexpectedTypeException($entity, 'object');
         }
-        if (!$this->unitOfWork->isInIdentityMap($entity)) {
-            throw new FormException('Entities passed to the choice field must be managed');
-        }
 
-        return $entity->getId();
+        if(is_array($entity)){
+            return array_map([$this, 'doEntityToId'], $entity);
+        }else{
+            return $this->doEntityToId($entity);
+        }
     }
 
     public function reverseTransform($id)
@@ -44,16 +46,42 @@ class EntityToIdTransformer implements DataTransformerInterface
             return null;
         }
 
-        if (!is_numeric($id)) {
+        if (!is_numeric($id) && !is_array($id)) {
             throw new UnexpectedTypeException($id, 'numeric' . $id);
         }
 
+        if(is_array($id)){
+            return array_map([$this, 'doFindEntity'], $id);
+        }else{
+            return $this->doFindEntity($id);
+        }
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function doFindEntity($id)
+    {
         $entity = $this->em->getRepository($this->class)->findOneById($id);
 
-        if ($entity === null) {
+        if($entity === null){
             throw new TransformationFailedException(sprintf('The entity with key "%s" could not be found', $id));
         }
 
         return $entity;
+    }
+
+    /**
+     * @param $entity
+     * @return mixed
+     */
+    public function doEntityToId($entity)
+    {
+        if(!$this->unitOfWork->isInIdentityMap($entity)){
+            throw new FormException('Entities passed to the choice field must be managed');
+        }
+
+        return $entity->getId();
     }
 }
